@@ -4,68 +4,67 @@
 	<title>Page d'Authentification</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
-	<link rel="stylesheet" type="text/css" href="<?php echo e(url('domain')); ?>/vendor/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="<?php echo e(url('domain')); ?>/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="<?php echo e(url('domain')); ?>/fonts/iconic/css/material-design-iconic-font.min.css">
-	<link rel="stylesheet" type="text/css" href="<?php echo e(url('domain')); ?>/vendor/animate/animate.css">
-	<link rel="stylesheet" type="text/css" href="<?php echo e(url('domain')); ?>/vendor/css-hamburgers/hamburgers.min.css">
-	<link rel="stylesheet" type="text/css" href="<?php echo e(url('domain')); ?>/vendor/animsition/css/animsition.min.css">
-	<link rel="stylesheet" type="text/css" href="<?php echo e(url('domain')); ?>/vendor/select2/select2.min.css">
-	<link rel="stylesheet" type="text/css" href="<?php echo e(url('domain')); ?>/vendor/daterangepicker/daterangepicker.css">
-	<link rel="stylesheet" type="text/css" href="<?php echo e(url('domain')); ?>/css/util.css">
-	<link rel="stylesheet" type="text/css" href="<?php echo e(url('domain')); ?>/css/main.css">
+	
+
+    <link rel="stylesheet" href="<?php echo e(url('backend')); ?>/vendors/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?php echo e(url('backend')); ?>/vendors/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?php echo e(url('backend')); ?>/vendors/themify-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="<?php echo e(url('backend')); ?>/vendors/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="<?php echo e(url('backend')); ?>/vendors/selectFX/css/cs-skin-elastic.css">
+    <link rel="stylesheet" href="<?php echo e(url('backend')); ?>/vendors/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="<?php echo e(url('backend')); ?>/vendors/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="<?php echo e(url('backend')); ?>/assets/css/style.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+
+
+
 </head>
+
 <body>
 
-<div class="limiter">
-	<div class="container-login100">
-		<div class="wrap-login100">
-			<form class="login100-form validate-form" action="<?php echo e(route('login')); ?>" method="POST">
-				<?php echo csrf_field(); ?>
 
 
-				<span class="login100-form-title p-b-26">
-						Bienvenu
-					</span>
-				<span class="login100-form-title p-b-48">
-						<i class="zmdi zmdi-font"></i>
-					</span>
-				<div class="wrap-input100 validate-input" data-validate = "Entrez un email du format : a@b.c">
-					<input class="input100" type="text" name="username"/>
-					<span class="focus-input100" data-placeholder="Email"></span>
-				</div>
-				<div class="wrap-input100 validate-input" data-validate="Entrez un mot de pass">
-						<span class="btn-show-pass">
-							<i class="zmdi zmdi-eye"></i>
-						</span>
-					<input class="input100" type="password" name="password" />
-					<span class="focus-input100" data-placeholder="Mot de Pass"></span>
-				</div>
+		<div class="sufee-login d-flex align-content-center flex-wrap">
+				<div class="container">
+					<div class="login-content">
+						<div class="login-logo">
+							<a href="index.html">
+								<img class="align-content" src="images/logo.png" alt="">
+							</a>
+						</div>
+						<div class="login-form">
 
-				<div class="container-login100-form-btn">
-					<div class="wrap-login100-form-btn">
-						<div class="login100-form-bgbtn"></div>
-						<input class="login100-form-btn" type="submit"/>
+								<form class="login100-form validate-form" action="<?php echo e(route('login')); ?>" method="POST">
+										<?php echo csrf_field(); ?>
+
+						
+										<div class="form-group">
+												<label>Email ou Nom d'Utilisateur </label>
+												<input type="email" class="form-control" placeholder="Email ou Pseudo" name="username">
+											</div>
+												<div class="form-group">
+													<label>Mot de pass</label>
+													<input type="password" class="form-control" placeholder="Mot de pass" name="password">
+											</div>
+												
+													<button type="submit" class="btn btn-success btn-flat m-b-30 m-t-30">Sign in</button>
+													
+												
+					
+									</form>
+
+						</div>
 					</div>
 				</div>
-			</form>
-		</div>
-	</div>
-</div>
+			</div>
 
+			
 
 <div id="dropDownSelect1"></div>
 
-<script src="<?php echo e(url('domain')); ?>/vendor/jquery/jquery-3.2.1.min.js"></script>
-<script src="<?php echo e(url('domain')); ?>/vendor/animsition/js/animsition.min.js"></script>
-<script src="<?php echo e(url('domain')); ?>/vendor/bootstrap/js/popper.js"></script>
-<script src="<?php echo e(url('domain')); ?>/vendor/bootstrap/js/bootstrap.min.js"></script>
-<script src="<?php echo e(url('domain')); ?>/vendor/select2/select2.min.js"></script>
-<script src="<?php echo e(url('domain')); ?>/vendor/daterangepicker/moment.min.js"></script>
-<script src="<?php echo e(url('domain')); ?>/vendor/daterangepicker/daterangepicker.js"></script>
-<script src="<?php echo e(url('domain')); ?>/vendor/countdowntime/countdowntime.js"></script>
-<script src="<?php echo e(url('domain')); ?>/js/main.js"></script>
+
+
+
 
 </body>
 </html>

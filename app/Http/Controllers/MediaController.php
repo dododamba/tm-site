@@ -169,10 +169,9 @@ class MediaController extends Controller
                 $media = \App\Media::all()->last();
                 $nom = $media->nom;
                 $id = $media->id;
-                $medias = \App\Media::orderBy('created_at', 'desc')->paginate(6);
                 $request->session()->put('image', $nom);
                 $request->session()->put('image_key',$id);
-                return view('backEnd.admin.carousel.create', compact('medias'));
+                return view('backEnd.admin.carousel.create', compact('media'));
 
             } else {
                 session()->flash('error', 'Echec de téléchargement, recommencez ');

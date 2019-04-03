@@ -92,7 +92,6 @@
 
 
 
-    <div class="container">
             <div class="row">
            
             <br/>
@@ -104,9 +103,10 @@
                     <a href="<?php echo e(route('logo.show',$item->id)); ?>" class="btn btn-secondary mb-1">
                             Voir
                     </a>
+                </div>
+
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-            </div>
         </div>
 
 

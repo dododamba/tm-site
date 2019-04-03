@@ -85,61 +85,13 @@
         </div>
     <?php endif; ?>
 
-    <div id="DemoModal2" class="modal fade "> <!-- class modal and fade -->
-
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
-                <div class="modal-header"> <!-- modal header -->
-                </div>
-
-                <div class="modal-body"> <!-- modal body -->
-
-                    <form action="<?php echo e(route('media.store')); ?>" method="POST" enctype="multipart/form-data">
-                        <?php echo csrf_field(); ?>
-
-                        <div class="file-upload">
-                            <button class="file-upload-btn" type="button"
-                                    onclick="$('.file-upload-input').trigger( 'click' )">Ajouter une image
-                            </button>
-
-                            <div class="image-upload-wrap">
-                                <input class="file-upload-input" type='file' onchange="readURL(this);"
-                                       accept="image/*" name="media"/>
-                                <div class="drag-text">
-                                    <h3>Glissez et Deposez ou Cliquez ici pour selection une image</h3>
-                                </div>
-                            </div>
-                            <div class="file-upload-content">
-                                <img class="file-upload-image" src="#" alt="your image"/>
-                                <div class="image-title-wrap">
-                                    <div class="row">
-                                        <button type="button" onclick="removeUpload()" class="remove-image">Changer
-                                            <span
-                                                    class="image-title">Image chargée</span></button>
-
-                                        <button type="submit" class="store-image">Enregistrer</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-
-                </div>
-
-
-            </div> <!-- / .modal-content -->
-
-        </div> <!-- / .modal-dialog -->
-
-    </div>
+  
 
     <hr>
 
 
 
 
-    <div class="container">
             <div class="row">
            
             <br/>
@@ -147,37 +99,15 @@
     
             <?php $__currentLoopData = $medias; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter hdpe">
-                    <img src="<?php echo e($item->nom); ?>" alt="<?php echo e($item->alt); ?>" class="img-responsive">
+                    <img src="/<?php echo e($item->nom); ?>" alt="" class="img-responsive">
                     <a href="<?php echo e(route('media.show',$item->id)); ?>" class="btn btn-secondary mb-1">
                             Voir
                     </a>
 
-
-                    <div class="modal fade" id="mediumModal<?php echo e($item->id); ?>" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="mediumModalLabel">Image</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                            <img src="<?php echo e($item->nom); ?>" alt="<?php echo e($item->alt); ?>" class="img-responsive">
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                        <button type="button" class="btn btn-primary">Supprimer</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-        
-                      
-                </div>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
             </div>
+
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
         </div>
 
 
@@ -187,40 +117,6 @@
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('javascript'); ?>
     <script>
-
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-
-                var reader = new FileReader();
-
-                reader.onload = function(e) {
-                    $('.image-upload-wrap').hide();
-
-                    $('.file-upload-image').attr('src', e.target.result);
-                    $('.file-upload-content').show();
-
-                    $('.image-title').html(input.files[0].name);
-                };
-
-                reader.readAsDataURL(input.files[0]);
-
-            } else {
-                removeUpload();
-            }
-        }
-
-        function removeUpload() {
-            $('.file-upload-input').replaceWith($('.file-upload-input').clone());
-            $('.file-upload-content').hide();
-            $('.image-upload-wrap').show();
-        }
-        $('.image-upload-wrap').bind('dragover', function () {
-            $('.image-upload-wrap').addClass('image-dropping');
-        });
-        $('.image-upload-wrap').bind('dragleave', function () {
-            $('.image-upload-wrap').removeClass('image-dropping');
-        });
-
 
         $(document).ready(function(){
 

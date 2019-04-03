@@ -93,7 +93,6 @@
 
 
 
-    <div class="container">
             <div class="row">
            
             <br/>
@@ -105,9 +104,10 @@
                     <a href="{{ route('logo.show',$item->id) }}" class="btn btn-secondary mb-1">
                             Voir
                     </a>
+                </div>
+
                 @endforeach
 
-            </div>
         </div>
 
 

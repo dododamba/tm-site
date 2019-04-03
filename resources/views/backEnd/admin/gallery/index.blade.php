@@ -93,7 +93,6 @@
 
 
 
-    <div class="container">
             <div class="row">
            
             <br/>
@@ -101,13 +100,15 @@
     
             @foreach($medias as $item)
                 <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter hdpe">
-                    <img src="//{{ $item->nom }}" alt="" class="img-responsive">
+                    <img src="/{{ $item->nom }}" alt="" class="img-responsive">
                     <a href="{{ route('media.show',$item->id) }}" class="btn btn-secondary mb-1">
                             Voir
                     </a>
-                @endforeach
 
             </div>
+
+            @endforeach
+
         </div>
 
 

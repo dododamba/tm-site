@@ -1,8 +1,7 @@
-@extends('backLayout.app')
-@section('title')
+<?php $__env->startSection('title'); ?>
     Création Carousel
-@stop
-@section('css')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('css'); ?>
     <style>
     
         hr {
@@ -167,10 +166,10 @@
 
     </style>
 
-@stop
+<?php $__env->stopSection(); ?>
 
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 
     <h1>Nouveau Carousel</h1>
 
@@ -185,17 +184,18 @@
                     
                                 
 
-                                @if(session()->has('image'))
+                                <?php if(session()->has('image')): ?>
                                     <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter hdpe">
-                                        <img src="/{{ $media->nom }}" alt="" class="img-responsive">
-                                        <a href="{{ route('media.show',$media->id) }}" class="btn btn-secondary mb-1">
+                                        <img src="/<?php echo e($media->nom); ?>" alt="" class="img-responsive">
+                                        <a href="<?php echo e(route('media.show',$media->id)); ?>" class="btn btn-secondary mb-1">
                                                 Voir
                                         </a>
                                     </div>
-                               @else
+                               <?php else: ?>
                                
-                               <form action="{{route('media.fromcarousel.store')}}" method="POST" enctype="multipart/form-data">
-                                {!! csrf_field() !!}
+                               <form action="<?php echo e(route('media.fromcarousel.store')); ?>" method="POST" enctype="multipart/form-data">
+                                <?php echo csrf_field(); ?>
+
                                 <div class="file-upload">
                                     <button class="file-upload-btn" type="button"
                                             onclick="$('.file-upload-input').trigger( 'click' )">Ajouter une image
@@ -223,13 +223,14 @@
                                 </div>
                             </form>
                             
-                            @endif
+                            <?php endif; ?>
 
 
 
 
 
-                            {!! Form::open(['url' => 'carousel', 'class' => 'form-horizontal']) !!}
+                            <?php echo Form::open(['url' => 'carousel', 'class' => 'form-horizontal']); ?>
+
 
                                 <div class="form-group">
                                     <label for="cc-payment" class="control-label mb-1">Lien</label>
@@ -251,9 +252,9 @@
                                 
                                         </div>
 
-                                        @if(session()->has('image_key'))
-                                        <input type="hidden" value="{{session()->get('image_key')}}" name="image">
-                                       @endif
+                                        <?php if(session()->has('image_key')): ?>
+                                        <input type="hidden" value="<?php echo e(session()->get('image_key')); ?>" name="image">
+                                       <?php endif; ?>
                                    
                                    
 
@@ -279,9 +280,9 @@
 
 
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('javascript')
+<?php $__env->startSection('javascript'); ?>
     <script>
 
         function readURL(input) {
@@ -319,5 +320,8 @@
     </script>
     <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
+
+<?php echo $__env->make('backLayout.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php /* /home/devtools/PHP/projects/tm-site/resources/views/backEnd/admin/carousel/create.blade.php */ ?>

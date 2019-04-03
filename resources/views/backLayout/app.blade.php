@@ -56,9 +56,7 @@
         
                             <div class="col-md-12">
                                 <div class="card">
-                                    <div class="card-header">
-                                        <strong class="card-title">Data Table</strong>
-                                    </div>
+                                   
                                     <div class="card-body">
                                             @yield('content')
                                     </div>

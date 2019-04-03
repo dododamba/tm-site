@@ -32,7 +32,7 @@ class LogoController extends Controller
      */
     public function create()
     {
-        return view('backEnd.admin.logo.index');
+        return view('backEnd.admin.logo.create');
     }
 
     /**
