@@ -1,23 +1,22 @@
-@extends('layout')
-@section('title','Accueil')
-@section('content')
+<?php $__env->startSection('title','Accueil'); ?>
+<?php $__env->startSection('content'); ?>
     <section id="mu-slider">
 
-        @foreach($carousel as $item)
+        <?php $__currentLoopData = $carousel; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <div class="mu-slider-single">
             <div class="mu-slider-img">
                 <figure>
-                    <img src="/{{ $item->image->nom }}" alt="{{ $item->image }}" style="height: 500px;width: 1920px;">
+                    <img src="/<?php echo e($item->image->nom); ?>" alt="<?php echo e($item->image); ?>" style="height: 500px;width: 1920px;">
                 </figure>
             </div>
             <div class="mu-slider-content">
                 <h4></h4>
                 <span></span>
-                <p>{{ $item->texte  }}</p>
-                <a href="/{{ $item->lien  }}" target="_blank" class="mu-read-more-btn">Voir</a>
+                <p><?php echo e($item->texte); ?></p>
+                <a href="/<?php echo e($item->lien); ?>" target="_blank" class="mu-read-more-btn">Voir</a>
             </div>
         </div>
-       @endforeach
+       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
     </section>
 
@@ -90,20 +89,20 @@
                                         </figcaption>
                                     </figure>
                                     <div class="mu-blog-description">
-                                        <p>{{ $messagebienvenu->message }}</p>
+                                        <p><?php echo e($messagebienvenu->message); ?></p>
                                     </div>
                                 </article>
 
 
                                 <div class="mu-latest-course-single">
                                     <figure class="mu-latest-course-img">
-                                        <a href="#"><img src="{{ url('front') }}/assets/img/courses/1.jpg" alt="img"></a>
+                                        <a href="#"><img src="<?php echo e(url('front')); ?>/assets/img/courses/1.jpg" alt="img"></a>
                                     </figure>
                                     <div class="mu-latest-course-single-content">
                                         <h2><a href="#">TECHNO MEGA PARTNERS</a></h2>
 
                                         <blockquote>
-                                            <p>{{ $apropos->texte }}</p>
+                                            <p><?php echo e($apropos->texte); ?></p>
                                         </blockquote>
 
                                     </div>
@@ -126,23 +125,23 @@
                                     <h3></h3>
                                     <div class="mu-related-item-area">
                                         <div id="mu-related-item-slide">
-                                            @foreach( $services as $item )
+                                            <?php $__currentLoopData = $services; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <div class="col-md-6">
                                                     <article class="mu-blog-single-item">
                                                         <figure class="mu-blog-single-img">
-                                                            <a href="#"><img alt="img" src="{{ url('front')}}/assets/img/blog/blog-1.jpg"></a>
+                                                            <a href="#"><img alt="img" src="<?php echo e(url('front')); ?>/assets/img/blog/blog-1.jpg"></a>
                                                             <figcaption class="mu-blog-caption">
-                                                                <h3><a href="#">{{ $item->nom }}</a></h3>
+                                                                <h3><a href="#"><?php echo e($item->nom); ?></a></h3>
                                                             </figcaption>
                                                         </figure>
 
                                                         <div class="mu-blog-description">
-                                                            <p>{!! sous_chaine( $item->texte,0,180) !!}</p>
+                                                            <p><?php echo sous_chaine( $item->texte,0,180); ?></p>
                                                             <a href="#" class="mu-read-more-btn">Plus de détail</a>
                                                         </div>
                                                     </article>
                                                 </div>
-                                            @endforeach
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </div>
                                     </div>
                                 </div>
@@ -161,23 +160,23 @@
                                     <h3></h3>
                                     <div class="mu-related-item-area">
                                         <div id="mu-related-item-slide">
-                                            @foreach( $produits as $item )
+                                            <?php $__currentLoopData = $produits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <div class="col-md-6">
                                                     <article class="mu-blog-single-item">
                                                         <figure class="mu-blog-single-img">
-                                                            <a href="#"><img alt="img" src="{{ url('front')}}/assets/img/blog/blog-1.jpg"></a>
+                                                            <a href="#"><img alt="img" src="<?php echo e(url('front')); ?>/assets/img/blog/blog-1.jpg"></a>
                                                             <figcaption class="mu-blog-caption">
-                                                                <h3><a href="#">{{ $item->nom }}</a></h3>
+                                                                <h3><a href="#"><?php echo e($item->nom); ?></a></h3>
                                                             </figcaption>
                                                         </figure>
 
                                                         <div class="mu-blog-description">
-                                                            <p>{!! sous_chaine( $item->texte,0,180) !!}</p>
+                                                            <p><?php echo sous_chaine( $item->texte,0,180); ?></p>
                                                             <a href="#" class="mu-read-more-btn">Plus de détail</a>
                                                         </div>
                                                     </article>
                                                 </div>
-                                            @endforeach
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </div>
                                     </div>
                                 </div>
@@ -190,7 +189,7 @@
 
                             <div class="col-md-3">
                                 <!-- start sidebar -->
-                            @include('front.side')
+                            <?php echo $__env->make('front.side', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                             <!-- / end sidebar -->
                             </div>
                         </div>
@@ -253,4 +252,7 @@
         </div>
     </section>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php /* /home/devtools/PHP/projects/tm-site/resources/views/home.blade.php */ ?>

@@ -1001,7 +1001,7 @@ textarea {
   width: 100%; }
 
 aside.left-panel {
-  background: #272c33;
+  background: #3685B0;
   display: table-cell;
   height: 100vh;
   min-height: 100%;
@@ -1012,7 +1012,7 @@ aside.left-panel {
   transition: width 0.3s ease; }
 
 .navbar {
-  background: #272c33;
+  background: #3685B0;
   border-radius: 0;
   border: none;
   display: block;
@@ -1023,8 +1023,8 @@ aside.left-panel {
     text-align: center;
     width: 100%; }
   .navbar .navbar-brand {
-    border-bottom: 1px solid #4e4e52;
-    color: #f1f2f7 !important;
+    border-bottom: 1px solid #3685B0;
+    color: #ffffff !important;
     font-family: 'Open Sans';
     font-size: 22px;
     float: none;
@@ -1052,8 +1052,8 @@ aside.left-panel {
     .navbar .navbar-brand.hidden {
       display: none; }
   .navbar .menu-title {
-    border-bottom: 1px solid #4e4e52;
-    color: #9496a1;
+    border-bottom: 1px solid #3685B0;
+    color: #ffffff;
     clear: both;
     display: block;
     font-family: 'Open Sans';
@@ -1071,12 +1071,12 @@ aside.left-panel {
       .navbar .navbar-nav li.active .menu-icon,
       .navbar .navbar-nav li:hover .toggle_nav_button:before,
       .navbar .navbar-nav li .toggle_nav_button.nav-open:before {
-        color: #fff !important; }
+        color: #ffffff !important; }
       .navbar .navbar-nav li .dropdown-toggle:after {
         display: none; }
       .navbar .navbar-nav li > a {
         background: none !important;
-        color: #c8c9ce !important;
+        color: #ffffff !important;
         display: inline-block;
         font-family: 'Open Sans';
         font-size: 14px;
@@ -1086,9 +1086,9 @@ aside.left-panel {
         width: 100%; }
         .navbar .navbar-nav li > a:hover,
         .navbar .navbar-nav li > a:hover .menu-icon {
-          color: #fff !important; }
+          color: #ffffff !important; }
         .navbar .navbar-nav li > a .menu-icon {
-          color: #8b939b;
+          color: #ffffff;
           float: left;
           margin-top: 8px;
           width: 55px;
@@ -1109,7 +1109,7 @@ aside.left-panel {
           line-height: 30px; }
           .navbar .navbar-nav li.menu-item-has-children a:before {
             content: "\f105";
-            color: #c8c9ce;
+            color: #ffffff;
             font-family: 'Fontawesome';
             font-size: 16px;
             position: absolute;
@@ -1119,9 +1119,9 @@ aside.left-panel {
             -webkit-transition: all 0.25s ease;
             transition: all 0.25s ease; }
           .navbar .navbar-nav li.menu-item-has-children a:hover:before {
-            color: #fff; }
+            color: #ffffff; }
         .navbar .navbar-nav li.menu-item-has-children .sub-menu {
-          background: #272c33;
+          background: #3685B0;
           border: none;
           box-shadow: none;
           overflow-y: hidden;
@@ -1129,7 +1129,7 @@ aside.left-panel {
           .navbar .navbar-nav li.menu-item-has-children .sub-menu li {
             position: relative; }
           .navbar .navbar-nav li.menu-item-has-children .sub-menu i {
-            color: #c8c9ce;
+            color: #ffffff;
             float: left;
             padding: 0;
             position: absolute;
@@ -1156,12 +1156,12 @@ aside.left-panel {
 .navbar .navbar-nav > .active > a,
 .navbar .navbar-nav > .active > a:focus,
 .navbar .navbar-nav > .active > a:hover {
-  color: #d7d9e3 !important; }
+  color: #ffffff !important; }
 
 .navbar-nav li span.count {
-  background: #a9d86e;
+  background: #3685B0;
   border-radius: 50%;
-  color: #fff;
+  color: #ffffff;
   font-family: 'Open Sans';
   font-size: 9px;
   font-weight: 700;

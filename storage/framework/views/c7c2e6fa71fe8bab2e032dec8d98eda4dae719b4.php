@@ -1,11 +1,10 @@
-@extends('backLayout.app')
-@section('title')
+<?php $__env->startSection('title'); ?>
     Gallery -Ajouter image
-@stop
-@section('breadcumb')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('breadcumb'); ?>
     image détail
-@stop
-@section('css')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('css'); ?>
     <style>
     
         hr {
@@ -170,13 +169,14 @@
 
     </style>
 
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 
-<form action="{{route('logo.store')}}" method="POST" enctype="multipart/form-data">
-    {!! csrf_field() !!}
+<form action="<?php echo e(route('media.store')); ?>" method="POST" enctype="multipart/form-data">
+    <?php echo csrf_field(); ?>
+
     <div class="file-upload">
         <button class="file-upload-btn" type="button"
                 onclick="$('.file-upload-input').trigger( 'click' )">Ajouter une image
@@ -205,9 +205,9 @@
 </form>
 
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('javascript')
+<?php $__env->startSection('javascript'); ?>
     <script>
 
         function readURL(input) {
@@ -273,4 +273,6 @@
     </script>
     <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('backLayout.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php /* /home/devtools/PHP/projects/tm-site/resources/views/backEnd/admin/gallery/create.blade.php */ ?>

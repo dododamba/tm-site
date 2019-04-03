@@ -19,8 +19,8 @@
 
  
 <div class="gallery_product filter hdpe">
-    <img src="/{{ $logo->nom }}" alt="{{  $logo->alt }}" class="img-responsive">
-    <a href="{{ route('logo.show',$logo->id) }}" class="btn btn-danger mb-1">
+    <img src="/{{ $media->nom }}" alt="{{  $media->alt }}" class="img-responsive">
+    <a href="{{ route('media.show',$media->id) }}" class="btn btn-danger mb-1">
             Supprimer
     </a>
 </div>

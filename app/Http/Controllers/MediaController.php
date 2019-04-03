@@ -26,7 +26,7 @@ class MediaController extends Controller
      */
     public function create()
     {
-        //
+        return view('backEnd.admin.gallery.create');
     }
 
     /**
@@ -83,7 +83,9 @@ class MediaController extends Controller
      */
     public function show($id)
     {
-        //
+        $media = Media::findOrFail($id);
+
+        return view('backEnd.admin.gallery.show',compact('media'));
     }
 
     /**

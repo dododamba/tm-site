@@ -1,11 +1,10 @@
-@extends('backLayout.app')
-@section('title')
+<?php $__env->startSection('title'); ?>
     Gallery
-@stop
-@section('breadcumb')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('breadcumb'); ?>
     Gallery
-@stop
-@section('css')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('css'); ?>
     <style>
         .gallery-title
         {
@@ -62,29 +61,29 @@
 
     </style>
 
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 
 
 
     <h1>
         <div class="DemoModal2">
-            <a href=" {{ route('media.create') }}" class="btn btn-lg btn-primary"
+            <a href=" <?php echo e(route('logo.create')); ?>" class="btn btn-lg btn-primary"
                >Ajouter une image </a>
         </div>
     </h1>
 
 
-    @if(session()->has('success'))
-        @include('alert.alert_success')
-    @endif
-    @if(session()->has('error'))
+    <?php if(session()->has('success')): ?>
+        <?php echo $__env->make('alert.alert_success', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php endif; ?>
+    <?php if(session()->has('error')): ?>
         <div class="alert alert-danger alert-dismissable">
-            @include('alert.alert_error')
+            <?php echo $__env->make('alert.alert_error', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         </div>
-    @endif
+    <?php endif; ?>
 
   
 
@@ -99,13 +98,13 @@
             <br/>
     
     
-            @foreach($medias as $item)
+            <?php $__currentLoopData = $logo; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter hdpe">
-                    <img src="{{ $item->nom }}" alt="{{  $item->alt }}" class="img-responsive">
-                    <a href="{{ route('media.show',$item->id) }}" class="btn btn-secondary mb-1">
+                    <img src="<?php echo e($item->nom); ?>" alt="<?php echo e($item->alt); ?>" class="img-responsive">
+                    <a href="<?php echo e(route('logo.show',$item->id)); ?>" class="btn btn-secondary mb-1">
                             Voir
                     </a>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
             </div>
         </div>
@@ -114,8 +113,8 @@
 
 
 
-@endsection
-@section('javascript')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('javascript'); ?>
     <script>
 
         $(document).ready(function(){
@@ -147,4 +146,7 @@
     </script>
     <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('backLayout.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php /* /home/devtools/PHP/projects/tm-site/resources/views/backEnd/admin/logo/index.blade.php */ ?>

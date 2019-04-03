@@ -175,7 +175,7 @@
 @section('content')
 
 
-<form action="{{route('logo.store')}}" method="POST" enctype="multipart/form-data">
+<form action="{{route('media.store')}}" method="POST" enctype="multipart/form-data">
     {!! csrf_field() !!}
     <div class="file-upload">
         <button class="file-upload-btn" type="button"
