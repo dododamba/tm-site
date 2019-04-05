@@ -14,7 +14,17 @@ Carousel citation
 @endif
 
 
-    <h1>Carouselcitation <a href="{{ url('citation/create') }}" class="btn btn-primary pull-right btn-sm">Add New Carouselcitation</a></h1>
+@if(session()->has('success'))
+    @include('alert.alert_success')
+@endif
+@if(session()->has('error'))
+    <div class="alert alert-danger alert-dismissable">
+        @include('alert.alert_error')
+    </div>
+@endif
+
+
+<h1>Citation <a href="{{ url('citation/create') }}" class="btn btn-primary pull-right btn-sm">+</a></h1>
     <div class="table table-responsive">
         <table class="table table-bordered table-striped table-hover" id="tblcarouselcitation">
             <thead>

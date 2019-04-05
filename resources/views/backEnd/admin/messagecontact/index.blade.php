@@ -5,6 +5,17 @@ Contact
 
 @section('content')
 
+
+    @if(session()->has('success'))
+        @include('alert.alert_success')
+    @endif
+    @if(session()->has('error'))
+        <div class="alert alert-danger alert-dismissable">
+            @include('alert.alert_error')
+        </div>
+    @endif
+
+
     <h1>Messages </h1>
     <div class="table table-responsive">
         <table class="table table-bordered table-striped table-hover" id="tblcontact">

@@ -5,6 +5,17 @@ Role
 
 @section('content')
 
+
+    @if(session()->has('success'))
+        @include('alert.alert_success')
+    @endif
+    @if(session()->has('error'))
+        <div class="alert alert-danger alert-dismissable">
+            @include('alert.alert_error')
+        </div>
+    @endif
+
+
     <h1>Role <a href="{{ url('role/create') }}" class="btn btn-primary pull-right btn-sm"><i class="fa fa-plus"></i></a></h1>
     <div class="table table-responsive">
         <table class="table table-bordered table-striped table-hover" id="tblrole">

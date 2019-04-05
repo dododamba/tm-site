@@ -5,9 +5,10 @@ Edit Messagebienvenu
 
 @section('content')
 
-    <h1>Edit Messagebienvenu</h1>
+    <h1>Edition mot du CEO </h1>
     <hr/>
 
+    <div class="card-body card-block">
     {!! Form::model($messagebienvenu, [
         'method' => 'PATCH',
         'url' => ['messagebienvenu', $messagebienvenu->id],
@@ -29,7 +30,7 @@ Edit Messagebienvenu
         </div>
     </div>
     {!! Form::close() !!}
-
+    </div>
     @if ($errors->any())
         <ul class="alert alert-danger">
             @foreach ($errors->all() as $error)

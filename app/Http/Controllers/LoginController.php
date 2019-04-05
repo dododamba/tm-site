@@ -33,17 +33,18 @@ class LoginController extends Controller {
         );
 
         if ($auth) {
-          flashy()->success('Bienvenu dans votre tableau de bord '.Auth::user()->first_name.' '.Auth::user()->last_name, '');
+          session()->flash('success','Bienvenu dans votre tableau de bord '.Auth::user()->first_name.' '.Auth::user()->last_name);
 
             return redirect()->route('dashboard');
         }
-        flashy()->error('Indentifiant incorrect, veuillez réesayer ou contactez les administrateurs','');
+        session()->flashy('error','Indentifiant incorrect, veuillez réesayer ou contactez les administrateurs');
 
         return redirect()->route('main');
     }
 
     public function logout() {
         Auth::guard('web')->logout();
+
         return redirect()->route('main');
     }
 

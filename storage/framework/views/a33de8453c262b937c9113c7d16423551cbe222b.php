@@ -1,10 +1,14 @@
 <?php $__env->startSection('title'); ?>
 Apropo
 <?php $__env->stopSection(); ?>
+<?php $__env->startSection('breadcumb'); ?>
+    A propo
+<?php $__env->stopSection(); ?>
+
 
 <?php $__env->startSection('content'); ?>
 
-    <h1>Apropos <a href="<?php echo e(url('apropos/create')); ?>" class="btn btn-primary pull-right btn-sm">Add New Apropo</a></h1>
+    <h1>Apropos <a href="<?php echo e(url('apropos/create')); ?>" class="btn btn-primary pull-right btn-sm">Créer un autre texte Apropo</a></h1>
     <div class="table table-responsive">
         <table class="table table-bordered table-striped table-hover" id="tblapropos">
             <thead>
@@ -18,17 +22,7 @@ Apropo
                     <td><?php echo e($item->id); ?></td>
                     <td><a href="<?php echo e(url('apropos', $item->id)); ?>"><?php echo e($item->titre); ?></a></td><td><?php echo e($item->text); ?></td><td><?php echo e($item->image); ?></td>
                     <td>
-                        <a href="<?php echo e(url('apropos/' . $item->id . '/edit')); ?>" class="btn btn-primary btn-xs">Update</a> 
-                        <?php echo Form::open([
-                            'method'=>'DELETE',
-                            'url' => ['apropos', $item->id],
-                            'style' => 'display:inline'
-                        ]); ?>
-
-                            <?php echo Form::submit('Delete', ['class' => 'btn btn-danger btn-xs']); ?>
-
-                        <?php echo Form::close(); ?>
-
+                        <a href="<?php echo e(url('apropos/' . $item->id . '/edit')); ?>" class="btn btn-primary "><i class="fa fa-edit"> </i></a>
                     </td>
                 </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

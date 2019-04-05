@@ -11,125 +11,118 @@ class MediaController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
-        $medias = Media::orderBy('created_at', 'desc')->paginate(20);
-        return view('backEnd.admin.gallery.index', compact('medias'));
+        $medias = Media::all();
+        defaultLog(Media::class);
+        return view('backEnd.admin.medias.index', compact('medias'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
-        return view('backEnd.admin.gallery.create');
+
+        createLog(Media::class);
+        return view('backEnd.admin.medias.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $format = file_manager()->extension('media');
-        $extention = [
-            'png', 'PNG', 'JPEG', 'jpeg', 'jpg', 'JPG'
-            //'audio'  => ['mp3','MP3','m4a','3gp','wav','bwf','aac'],
-            //'video' => ['avi','mp4']
-        ];
-
-        if (!in_array($format, $extention)) {
-            $token = name_generator('tmp', 10);
-            $filename = file_manager()->filename('images/images/' . $token, 'media');
-            $data = [
-                'nom' => $filename,
-                'description' => Str::slug($filename, '-'),
-                'alt' => $filename,
-                'type' => $format,
-                'owner' => 0
-            ];
-            if (Media::create($data)) {
-                file_manager()->store('images/images/' . $token, 'media');
-                session()->flash('success', 'image ajouté avec succès ');
-                return redirect('gallery');
-
-            } else {
-                session()->flash('error', 'Echec de téléchargement, recommencez ');
-                return redirect('gallery');
-            }
-
-        } else {
-            session()->flash('error', 'le fichier choisie n\'est pas une image ');
-
-            return redirect('gallery');
-
-
-        }
-
-
-    }
 
     /**
      * Display the specified resource.
      *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param  int  $id
+     *
+     * @return Response
      */
     public function show($id)
     {
-        $media = Media::findOrFail($id);
 
-        return view('backEnd.admin.gallery.show',compact('media'));
+        if (Media::findOrFail($id))   {
+            $medias = Media::findOrFail($id);
+            showLog(Media::class,$id);
+            return view('backEnd.admin.medias.show', compact('medias'));
+        }
+
+        session()->flash('error', ' l\'arcticle n\'existe pas !');
+        showFailureLog(Media::class,$id);
+        return view('backEnd.admin.medias.show', compact('medias'));
+
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param  int  $id
+     *
+     * @return Response
      */
     public function edit($id)
     {
-        //
+
+        if (Media::findOrFail($id))   {
+            $medias = Media::findOrFail($id);
+            editLog(Media::class,$id);
+            return view('backEnd.admin.medias.edit', compact('medias'));
+        }
+
+        editFailureLog(Media::class,$id);
+        return view('backEnd.admin.medias.edit', compact('medias'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param  int  $id
+     *
+     * @return Response
      */
-    public function update(Request $request, $id)
+    public function update($id, Request $request)
     {
-        //
+
+
+        if (Media::findOrFail($id)){
+            $medias =  Media::findOrFail($id);
+
+            if ($medias->update($request->all())){
+                session()->flash('success', 'Log mise à jours avec succès!');
+                updateLog(Media::class,$id);
+                return redirect('medias');
+            }
+        }
+
+
+        session()->flash('error', 'Echec mise à jours , l\'arcticle n\'existe pas !');
+        updateFailureLog(Media::class,$id);
+        return redirect('medias');
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param  int  $id
+     *
+     * @return Response
      */
     public function destroy($id)
     {
-       $media = Media::findOrFail($id);
+        if (Media::findOrFail($id))   {
+            $medias = Media::findOrFail($id);
+            $medias->delete();
+            session()->flash('success', 'mise à jours avec effectué avec succes!');
+            deleteLog(Media::class,$id);
+            return redirect('medias');
+        }
 
-       if ($media->delete())  {
-           session()->flash('success', 'image supprimé avec succès ');
-           return redirect('gallery');
-
-       }else  {
-           session()->flash('error', 'image ajouté avec succès ');
-           return redirect('gallery');
-
-       }
+        session()->flash('error', 'Echec suppression , l\'arcticle n\'existe pas !');
+        deleteFailureLog(Media::class,$id);
+        return redirect('medias');
     }
 
     public function selectImg(Request $request)
@@ -185,5 +178,52 @@ class MediaController extends Controller
 
 
         }
+    }
+
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $format = file_manager()->extension('media');
+        $extention = [
+            'png', 'PNG', 'JPEG', 'jpeg', 'jpg', 'JPG'
+            //'audio'  => ['mp3','MP3','m4a','3gp','wav','bwf','aac'],
+            //'video' => ['avi','mp4']
+        ];
+
+        if (!in_array($format, $extention)) {
+            $token = name_generator('tmp', 10);
+            $filename = file_manager()->filename('images/images/' . $token, 'media');
+            $data = [
+                'nom' => $filename,
+                'description' => Str::slug($filename, '-'),
+                'alt' => $filename,
+                'type' => $format,
+                'owner' => 0
+            ];
+            if (Media::create($data)) {
+                file_manager()->store('images/images/' . $token, 'media');
+                session()->flash('success', 'image ajouté avec succès ');
+                return redirect('gallery');
+
+            } else {
+                session()->flash('error', 'Echec de téléchargement, recommencez ');
+                return redirect('gallery');
+            }
+
+        } else {
+            session()->flash('error', 'le fichier choisie n\'est pas une image ');
+
+            return redirect('gallery');
+
+
+        }
+
+
     }
 }

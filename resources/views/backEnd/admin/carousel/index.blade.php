@@ -5,6 +5,17 @@ Carousel
 
 @section('content')
 
+
+    @if(session()->has('success'))
+        @include('alert.alert_success')
+    @endif
+    @if(session()->has('error'))
+        <div class="alert alert-danger alert-dismissable">
+            @include('alert.alert_error')
+        </div>
+    @endif
+
+
     <h1>Carousel <a href=" {{ route('carousel.create') }}"  class="btn btn-primary pull-right btn-sm"  >+</a></h1>
 
    

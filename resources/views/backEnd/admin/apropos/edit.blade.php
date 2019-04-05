@@ -8,9 +8,9 @@ Edit Apropo
     <h1>Edit Apropo</h1>
     <hr/>
 
-    {!! Form::model($apropo, [
+    {!! Form::model($apropos, [
         'method' => 'PATCH',
-        'url' => ['apropos', $apropo->id],
+        'url' => ['apropos', $apropos->id],
         'class' => 'form-horizontal'
     ]) !!}
 

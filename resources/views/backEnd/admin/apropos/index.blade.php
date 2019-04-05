@@ -2,10 +2,25 @@
 @section('title')
 Apropo
 @stop
+@section('breadcumb')
+    A propo
+@stop
+
 
 @section('content')
 
-    <h1>Apropos <a href="{{ url('apropos/create') }}" class="btn btn-primary pull-right btn-sm">Add New Apropo</a></h1>
+
+    @if(session()->has('success'))
+        @include('alert.alert_success')
+    @endif
+    @if(session()->has('error'))
+        <div class="alert alert-danger alert-dismissable">
+            @include('alert.alert_error')
+        </div>
+    @endif
+
+
+    <h1>Apropos <a href="{{ url('apropos/create') }}" class="btn btn-primary pull-right btn-sm">Créer un autre texte Apropo</a></h1>
     <div class="table table-responsive">
         <table class="table table-bordered table-striped table-hover" id="tblapropos">
             <thead>
@@ -19,14 +34,7 @@ Apropo
                     <td>{{ $item->id }}</td>
                     <td><a href="{{ url('apropos', $item->id) }}">{{ $item->titre }}</a></td><td>{{ $item->text }}</td><td>{{ $item->image }}</td>
                     <td>
-                        <a href="{{ url('apropos/' . $item->id . '/edit') }}" class="btn btn-primary btn-xs">Update</a> 
-                        {!! Form::open([
-                            'method'=>'DELETE',
-                            'url' => ['apropos', $item->id],
-                            'style' => 'display:inline'
-                        ]) !!}
-                            {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs']) !!}
-                        {!! Form::close() !!}
+                        <a href="{{ url('apropos/' . $item->id . '/edit') }}" class="btn btn-primary "><i class="fa fa-edit"> </i></a>
                     </td>
                 </tr>
             @endforeach

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\APropo;
 use App\Carousel;
+use App\Front;
 use App\Media;
 use App\MediaObject;
 use App\MessageBienvenu;
@@ -33,10 +34,9 @@ class HomeController extends Controller
         $icons = Icon::orderBy('created_at','desc')->get();
         $contact = Contact::all()->first();
         $coordonee = Coordonee::all()->first();
-        $carousel_pict = MediaObject::all();
         $citation = CarouselCitation::all();
 
-        createLog('Consultation','Ouverture de la page principale');
+        defaultLog(Front::class);
         return view('home',
                     compact(
                         'apropos',

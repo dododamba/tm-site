@@ -21,7 +21,7 @@ class ServiceController extends Controller
     public function index()
     {
         $service = Service::all();
-
+        defaultLog(Service::class);
         return view('backEnd.admin.service.index', compact('service'));
     }
 
@@ -32,6 +32,8 @@ class ServiceController extends Controller
      */
     public function create()
     {
+
+        createLog(Service::class);
         return view('backEnd.admin.service.create');
     }
 
@@ -42,12 +44,15 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        
-        Service::create($request->all());
 
-        Session::flash('message', 'Service added!');
-        Session::flash('status', 'success');
 
+        if ( Service::create($request->all())) {
+            session()->flash('message', tableName(Service::class).' ajouté avec succès, id = '.lastChild(Service::class));
+            storeLog(Service::class);
+            return redirect('service');
+
+        }
+        createFailureLog(Service::class);
         return redirect('service');
     }
 
@@ -60,9 +65,17 @@ class ServiceController extends Controller
      */
     public function show($id)
     {
-        $service = Service::findOrFail($id);
 
+        if (Service::findOrFail($id))   {
+            $service = Service::findOrFail($id);
+            showLog(Service::class,$id);
+            return view('backEnd.admin.service.show', compact('service'));
+        }
+
+        session()->flash('error', ' l\'arcticle n\'existe pas !');
+        showFailureLog(Service::class,$id);
         return view('backEnd.admin.service.show', compact('service'));
+
     }
 
     /**
@@ -74,8 +87,14 @@ class ServiceController extends Controller
      */
     public function edit($id)
     {
-        $service = Service::findOrFail($id);
 
+        if (Service::findOrFail($id))   {
+            $service = Service::findOrFail($id);
+            editLog(Service::class,$id);
+            return view('backEnd.admin.service.edit', compact('service'));
+        }
+
+        editFailureLog(Service::class,$id);
         return view('backEnd.admin.service.edit', compact('service'));
     }
 
@@ -88,14 +107,23 @@ class ServiceController extends Controller
      */
     public function update($id, Request $request)
     {
-        
-        $service = Service::findOrFail($id);
-        $service->update($request->all());
 
-        Session::flash('message', 'Service updated!');
-        Session::flash('status', 'success');
 
+        if (Service::findOrFail($id)){
+            $service =  Service::findOrFail($id);
+
+            if ($service->update($request->all())){
+                session()->flash('success', 'Log mise à jours avec succès!');
+                updateLog(Service::class,$id);
+                return redirect('service');
+            }
+        }
+
+
+        session()->flash('error', 'Echec mise à jours , l\'arcticle n\'existe pas !');
+        updateFailureLog(Service::class,$id);
         return redirect('service');
+
     }
 
     /**
@@ -107,13 +135,16 @@ class ServiceController extends Controller
      */
     public function destroy($id)
     {
-        $service = Service::findOrFail($id);
+        if (Service::findOrFail($id))   {
+            $service = Service::findOrFail($id);
+            $service->delete();
+            session()->flash('success', 'mise à jours avec effectué avec succes!');
+            deleteLog(Service::class,$id);
+            return redirect('service');
+        }
 
-        $service->delete();
-
-        Session::flash('message', 'Service deleted!');
-        Session::flash('status', 'success');
-
+        session()->flash('error', 'Echec suppression , l\'arcticle n\'existe pas !');
+        deleteFailureLog(Service::class,$id);
         return redirect('service');
     }
 

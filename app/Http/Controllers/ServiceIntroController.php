@@ -13,6 +13,7 @@ use Session;
 class ServiceIntroController extends Controller
 {
 
+
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +22,7 @@ class ServiceIntroController extends Controller
     public function index()
     {
         $serviceintro = ServiceIntro::all();
-
+        defaultLog(ServiceIntro::class);
         return view('backEnd.admin.serviceintro.index', compact('serviceintro'));
     }
 
@@ -32,6 +33,8 @@ class ServiceIntroController extends Controller
      */
     public function create()
     {
+
+        createLog(ServiceIntro::class);
         return view('backEnd.admin.serviceintro.create');
     }
 
@@ -42,12 +45,15 @@ class ServiceIntroController extends Controller
      */
     public function store(Request $request)
     {
-        
-        ServiceIntro::create($request->all());
 
-        Session::flash('message', 'ServiceIntro added!');
-        Session::flash('status', 'success');
 
+        if ( ServiceIntro::create($request->all())) {
+            session()->flash('message', tableName(ServiceIntro::class).' ajouté avec succès, id = '.lastChild(ServiceIntro::class));
+            storeLog(ServiceIntro::class);
+            return redirect('serviceintro');
+
+        }
+        createFailureLog(ServiceIntro::class);
         return redirect('serviceintro');
     }
 
@@ -60,9 +66,17 @@ class ServiceIntroController extends Controller
      */
     public function show($id)
     {
-        $serviceintro = ServiceIntro::findOrFail($id);
 
+        if (ServiceIntro::findOrFail($id))   {
+            $serviceintro = ServiceIntro::findOrFail($id);
+            showLog(ServiceIntro::class,$id);
+            return view('backEnd.admin.serviceintro.show', compact('serviceintro'));
+        }
+
+        session()->flash('error', ' l\'arcticle n\'existe pas !');
+        showFailureLog(ServiceIntro::class,$id);
         return view('backEnd.admin.serviceintro.show', compact('serviceintro'));
+
     }
 
     /**
@@ -74,8 +88,14 @@ class ServiceIntroController extends Controller
      */
     public function edit($id)
     {
-        $serviceintro = ServiceIntro::findOrFail($id);
 
+        if (ServiceIntro::findOrFail($id))   {
+            $serviceintro = ServiceIntro::findOrFail($id);
+            editLog(ServiceIntro::class,$id);
+            return view('backEnd.admin.serviceintro.edit', compact('serviceintro'));
+        }
+
+        editFailureLog(ServiceIntro::class,$id);
         return view('backEnd.admin.serviceintro.edit', compact('serviceintro'));
     }
 
@@ -88,14 +108,23 @@ class ServiceIntroController extends Controller
      */
     public function update($id, Request $request)
     {
-        
-        $serviceintro = ServiceIntro::findOrFail($id);
-        $serviceintro->update($request->all());
 
-        Session::flash('message', 'ServiceIntro updated!');
-        Session::flash('status', 'success');
 
+        if (ServiceIntro::findOrFail($id)){
+            $serviceintro =  ServiceIntro::findOrFail($id);
+
+            if ($serviceintro->update($request->all())){
+                session()->flash('success', 'Log mise à jours avec succès!');
+                updateLog(ServiceIntro::class,$id);
+                return redirect('serviceintro');
+            }
+        }
+
+
+        session()->flash('error', 'Echec mise à jours , l\'arcticle n\'existe pas !');
+        updateFailureLog(ServiceIntro::class,$id);
         return redirect('serviceintro');
+
     }
 
     /**
@@ -107,13 +136,16 @@ class ServiceIntroController extends Controller
      */
     public function destroy($id)
     {
-        $serviceintro = ServiceIntro::findOrFail($id);
+        if (ServiceIntro::findOrFail($id))   {
+            $serviceintro = ServiceIntro::findOrFail($id);
+            $serviceintro->delete();
+            session()->flash('success', 'mise à jours avec effectué avec succes!');
+            deleteLog(ServiceIntro::class,$id);
+            return redirect('serviceintro');
+        }
 
-        $serviceintro->delete();
-
-        Session::flash('message', 'ServiceIntro deleted!');
-        Session::flash('status', 'success');
-
+        session()->flash('error', 'Echec suppression , l\'arcticle n\'existe pas !');
+        deleteFailureLog(ServiceIntro::class,$id);
         return redirect('serviceintro');
     }
 

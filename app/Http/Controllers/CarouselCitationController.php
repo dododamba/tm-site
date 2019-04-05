@@ -21,8 +21,7 @@ class CarouselCitationController extends Controller
     public function index()
     {
         $carouselcitation = CarouselCitation::all();
-        createLog('Consultation','Ouverture de la liste des citations');
-
+        defaultLog(CarouselCitation::class);
         return view('backEnd.admin.carouselcitation.index', compact('carouselcitation'));
     }
 
@@ -33,8 +32,8 @@ class CarouselCitationController extends Controller
      */
     public function create()
     {
-        createLog('Creation','Ouverture de la page de creation des citations');
 
+        createLog(CarouselCitation::class);
         return view('backEnd.admin.carouselcitation.create');
     }
 
@@ -45,17 +44,16 @@ class CarouselCitationController extends Controller
      */
     public function store(Request $request)
     {
-        
-        CarouselCitation::create($request->all());
 
-        session()->flash('success', 'citation ajouté avec succès !');
-        
 
-        $last_citation = CarouselCitation::orderBy('created_at','desc')->first();
+        if ( CarouselCitation::create($request->all())) {
+            session()->flash('message', tableName(CarouselCitation::class).' ajouté avec succès, id = '.lastChild(CarouselCitation::class));
+            storeLog(CarouselCitation::class);
+            return redirect('carouselcitation');
 
-        createLog('Enregistrent','Création de la citation id = '.$last_citation->id);
-
-        return redirect('citations');
+        }
+        createFailureLog(CarouselCitation::class);
+        return redirect('carouselcitation');
     }
 
     /**
@@ -67,9 +65,17 @@ class CarouselCitationController extends Controller
      */
     public function show($id)
     {
-        $carouselcitation = CarouselCitation::findOrFail($id);
 
+        if (CarouselCitation::findOrFail($id))   {
+            $carouselcitation = CarouselCitation::findOrFail($id);
+            showLog(CarouselCitation::class,$id);
+            return view('backEnd.admin.carouselcitation.show', compact('carouselcitation'));
+        }
+
+        session()->flash('error', ' l\'arcticle n\'existe pas !');
+        showFailureLog(CarouselCitation::class,$id);
         return view('backEnd.admin.carouselcitation.show', compact('carouselcitation'));
+
     }
 
     /**
@@ -81,8 +87,14 @@ class CarouselCitationController extends Controller
      */
     public function edit($id)
     {
-        $carouselcitation = CarouselCitation::findOrFail($id);
 
+        if (CarouselCitation::findOrFail($id))   {
+            $carouselcitation = CarouselCitation::findOrFail($id);
+            editLog(CarouselCitation::class,$id);
+            return view('backEnd.admin.carouselcitation.edit', compact('carouselcitation'));
+        }
+
+        editFailureLog(CarouselCitation::class,$id);
         return view('backEnd.admin.carouselcitation.edit', compact('carouselcitation'));
     }
 
@@ -95,14 +107,23 @@ class CarouselCitationController extends Controller
      */
     public function update($id, Request $request)
     {
-        
-        $carouselcitation = CarouselCitation::findOrFail($id);
-        $carouselcitation->update($request->all());
 
-        session()->flash('success', 'CarouselCitation updated!');
-        
 
+        if (CarouselCitation::findOrFail($id)){
+            $apropo =  CarouselCitation::findOrFail($id);
+
+            if ($apropo->update($request->all())){
+                session()->flash('success', 'Carousel mise à jours avec succès!');
+                updateLog(CarouselCitation::class,$id);
+                return redirect('carouselcitation');
+            }
+        }
+
+
+        session()->flash('error', 'Echec mise à jours , l\'arcticle n\'existe pas !');
+        updateFailureLog(CarouselCitation::class,$id);
         return redirect('carouselcitation');
+
     }
 
     /**
@@ -114,14 +135,16 @@ class CarouselCitationController extends Controller
      */
     public function destroy($id)
     {
-        $carouselcitation = CarouselCitation::findOrFail($id);
+        if (CarouselCitation::findOrFail($id))   {
+            $apropo = CarouselCitation::findOrFail($id);
+            $apropo->delete();
+            session()->flash('success', 'mise à jours avec effectué avec succes!');
+            deleteLog(CarouselCitation::class,$id);
+            return redirect('carousel');
+        }
 
-        $carouselcitation->delete();
-
-        session()->flash('success', 'CarouselCitation deleted!');
-        
-
-        return redirect('carouselcitation');
+        session()->flash('error', 'Echec suppression , l\'arcticle n\'existe pas !');
+        deleteFailureLog(CarouselCitation::class,$id);
+        return redirect('carousel');
     }
-
 }

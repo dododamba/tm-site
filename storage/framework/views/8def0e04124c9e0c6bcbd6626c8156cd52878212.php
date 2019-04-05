@@ -1,34 +1,23 @@
 <?php $__env->startSection('title'); ?>
-Messagebienvenu
+Mot du CEO
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
 
-    <h1>Messagebienvenu <a href="<?php echo e(url('messagebienvenu/create')); ?>" class="btn btn-primary pull-right btn-sm">Add New Messagebienvenu</a></h1>
+    <h1>Mot du  CEO </h1>
     <div class="table table-responsive">
         <table class="table table-bordered table-striped table-hover" id="tblmessagebienvenu">
             <thead>
                 <tr>
-                    <th>ID</th><th>Message</th><th>Actions</th>
+                    <th>Message</th><th></th>
                 </tr>
             </thead>
             <tbody>
             <?php $__currentLoopData = $messagebienvenu; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <tr>
-                    <td><?php echo e($item->id); ?></td>
                     <td><a href="<?php echo e(url('messagebienvenu', $item->id)); ?>"><?php echo e($item->message); ?></a></td>
                     <td>
-                        <a href="<?php echo e(url('messagebienvenu/' . $item->id . '/edit')); ?>" class="btn btn-primary btn-xs">Update</a> 
-                        <?php echo Form::open([
-                            'method'=>'DELETE',
-                            'url' => ['messagebienvenu', $item->id],
-                            'style' => 'display:inline'
-                        ]); ?>
-
-                            <?php echo Form::submit('Delete', ['class' => 'btn btn-danger btn-xs']); ?>
-
-                        <?php echo Form::close(); ?>
-
+                        <a href="<?php echo e(url('messagebienvenu/' . $item->id . '/edit')); ?>" class="btn btn-primary "><i class="fa fa-edit"></i></a>
                     </td>
                 </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

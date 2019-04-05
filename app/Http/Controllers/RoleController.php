@@ -21,7 +21,7 @@ class RoleController extends Controller
     public function index()
     {
         $role = Role::all();
-
+        defaultLog(Role::class);
         return view('backEnd.admin.role.index', compact('role'));
     }
 
@@ -32,6 +32,8 @@ class RoleController extends Controller
      */
     public function create()
     {
+
+        createLog(Role::class);
         return view('backEnd.admin.role.create');
     }
 
@@ -42,12 +44,15 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        
-        Role::create($request->all());
 
-        Session::flash('message', 'Role added!');
-        Session::flash('status', 'success');
 
+        if ( Role::create($request->all())) {
+            session()->flash('message', tableName(Role::class).' ajouté avec succès, id = '.lastChild(Role::class));
+            storeLog(Role::class);
+            return redirect('role');
+
+        }
+        createFailureLog(Role::class);
         return redirect('role');
     }
 
@@ -60,9 +65,17 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $role = Role::findOrFail($id);
 
+        if (Role::findOrFail($id))   {
+            $role = Role::findOrFail($id);
+            showLog(Role::class,$id);
+            return view('backEnd.admin.role.show', compact('role'));
+        }
+
+        session()->flash('error', ' l\'arcticle n\'existe pas !');
+        showFailureLog(Role::class,$id);
         return view('backEnd.admin.role.show', compact('role'));
+
     }
 
     /**
@@ -74,8 +87,14 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        $role = Role::findOrFail($id);
 
+        if (Role::findOrFail($id))   {
+            $role = Role::findOrFail($id);
+            editLog(Role::class,$id);
+            return view('backEnd.admin.role.edit', compact('role'));
+        }
+
+        editFailureLog(Role::class,$id);
         return view('backEnd.admin.role.edit', compact('role'));
     }
 
@@ -88,14 +107,23 @@ class RoleController extends Controller
      */
     public function update($id, Request $request)
     {
-        
-        $role = Role::findOrFail($id);
-        $role->update($request->all());
 
-        Session::flash('message', 'Role updated!');
-        Session::flash('status', 'success');
 
+        if (Role::findOrFail($id)){
+            $role =  Role::findOrFail($id);
+
+            if ($role->update($request->all())){
+                session()->flash('success', 'Log mise à jours avec succès!');
+                updateLog(Role::class,$id);
+                return redirect('role');
+            }
+        }
+
+
+        session()->flash('error', 'Echec mise à jours , l\'arcticle n\'existe pas !');
+        updateFailureLog(Role::class,$id);
         return redirect('role');
+
     }
 
     /**
@@ -107,13 +135,16 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $role = Role::findOrFail($id);
+        if (Role::findOrFail($id))   {
+            $role = Role::findOrFail($id);
+            $role->delete();
+            session()->flash('success', 'mise à jours avec effectué avec succes!');
+            deleteLog(Role::class,$id);
+            return redirect('role');
+        }
 
-        $role->delete();
-
-        Session::flash('message', 'Role deleted!');
-        Session::flash('status', 'success');
-
+        session()->flash('error', 'Echec suppression , l\'arcticle n\'existe pas !');
+        deleteFailureLog(Role::class,$id);
         return redirect('role');
     }
 

@@ -12,7 +12,6 @@ use Session;
 
 class LogoController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -20,9 +19,9 @@ class LogoController extends Controller
      */
     public function index()
     {
-        $logo = Logo::all();
-
-        return view('backEnd.admin.logo.index', compact('logo'));
+        $logos = Logo::all();
+        defaultLog(Logo::class);
+        return view('backEnd.admin.logos.index', compact('logos'));
     }
 
     /**
@@ -32,55 +31,11 @@ class LogoController extends Controller
      */
     public function create()
     {
-        return view('backEnd.admin.logo.create');
+
+        createLog(Logo::class);
+        return view('backEnd.admin.logos.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-        
-        $format = file_manager()->extension('logo');
-        $extention = [
-            'png', 'PNG', 'JPEG', 'jpeg', 'jpg', 'JPG'
-    
-        ];
-
-        if (!in_array($format, $extention)) {
-            $token = name_generator('tmp', 10);
-            $filename = file_manager()->filename('images/images/' . $token, 'logo');
-            $data = [
-                'nom' => $filename,
-                'alt' => \Illuminate\Support\Str::slug($filename, '-'),
-                'media' => 0
-            ];
-            
-            if (\App\Logo::create($data)) {
-                file_manager()->store('images/images/' . $token, 'logo');
-
-                $media = \App\Logo::all()->last();
-                $nom = $media->nom;
-                $id = $media->id;
-             
-                return redirect('logos');
-
-            } else {
-                session()->flash('error', 'Echec de téléchargement, recommencez ');
-                return redirect('logos');
-            }
-
-        } else {
-            session()->flash('error', 'le fichier choisie n\'est pas une image ');
-
-            return redirect('logos');
-
-
-        }
-    
-    }
 
     /**
      * Display the specified resource.
@@ -91,9 +46,17 @@ class LogoController extends Controller
      */
     public function show($id)
     {
-        $logo = Logo::findOrFail($id);
 
-        return view('backEnd.admin.logo.show', compact('logo'));
+        if (Logo::findOrFail($id))   {
+            $logos = Logo::findOrFail($id);
+            showLog(Logo::class,$id);
+            return view('backEnd.admin.logos.show', compact('logos'));
+        }
+
+        session()->flash('error', ' l\'arcticle n\'existe pas !');
+        showFailureLog(Logo::class,$id);
+        return view('backEnd.admin.logos.show', compact('logos'));
+
     }
 
     /**
@@ -105,9 +68,15 @@ class LogoController extends Controller
      */
     public function edit($id)
     {
-        $logo = Logo::findOrFail($id);
 
-        return view('backEnd.admin.logo.edit', compact('logo'));
+        if (Logo::findOrFail($id))   {
+            $logos = Logo::findOrFail($id);
+            editLog(Logo::class,$id);
+            return view('backEnd.admin.logos.edit', compact('logos'));
+        }
+
+        editFailureLog(Logo::class,$id);
+        return view('backEnd.admin.logos.edit', compact('logos'));
     }
 
     /**
@@ -119,14 +88,23 @@ class LogoController extends Controller
      */
     public function update($id, Request $request)
     {
-        
-        $logo = Logo::findOrFail($id);
-        $logo->update($request->all());
 
-        session()->flash('message', 'Logo updated!');
-        session()->flash('status', 'success');
 
+        if (Logo::findOrFail($id)){
+            $logos =  Logo::findOrFail($id);
+
+            if ($logos->update($request->all())){
+                session()->flash('success', 'Log mise à jours avec succès!');
+                updateLog(Logo::class,$id);
+                return redirect('logos');
+            }
+        }
+
+
+        session()->flash('error', 'Echec mise à jours , l\'arcticle n\'existe pas !');
+        updateFailureLog(Logo::class,$id);
         return redirect('logos');
+
     }
 
     /**
@@ -138,14 +116,78 @@ class LogoController extends Controller
      */
     public function destroy($id)
     {
-        $logo = Logo::findOrFail($id);
+        if (Logo::findOrFail($id))   {
+            $logos = Logo::findOrFail($id);
+            $logos->delete();
+            session()->flash('success', 'mise à jours avec effectué avec succes!');
+            deleteLog(Logo::class,$id);
+            return redirect('logos');
+        }
 
-        $logo->delete();
-
-        session()->flash('message', 'Logo deleted!');
-        session()->flash('status', 'success');
-
+        session()->flash('error', 'Echec suppression , l\'arcticle n\'existe pas !');
+        deleteFailureLog(Logo::class,$id);
         return redirect('logos');
     }
 
+    public function selectImg(Request $request)
+    {
+        $id = $request->id;
+        $logo = \App\Logo::findOrFail($id);
+        $nom = $logo->nom;
+        $logos = \App\Logo::orderBy('created_at', 'desc')->paginate(6);
+        $request->session()->put('image', $nom);
+        $request->session()->put('image_key',$id);
+        createLog(Logo::class);
+        return view('backEnd.admin.carousel.create', compact('logos'));
+    }
+
+
+
+
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $format = file_manager()->extension('logo');
+        $extention = [
+            'png', 'PNG', 'JPEG', 'jpeg', 'jpg', 'JPG'
+            //'audio'  => ['mp3','MP3','m4a','3gp','wav','bwf','aac'],
+            //'video' => ['avi','mp4']
+        ];
+
+        if (!in_array($format, $extention)) {
+            $token = name_generator('tmp', 10);
+            $filename = file_manager()->filename('images/images/' . $token, 'logo');
+            $data = [
+                'nom' => $filename,
+                'description' => Str::slug($filename, '-'),
+                'alt' => $filename,
+                'type' => $format,
+                'owner' => 0
+            ];
+            if (Logo::create($data)) {
+                file_manager()->store('images/images/' . $token, 'logo');
+                session()->flash('success', 'image ajouté avec succès ');
+                return redirect('logo');
+
+            } else {
+                session()->flash('error', 'Echec de téléchargement, recommencez ');
+                return redirect('logo');
+            }
+
+        } else {
+            session()->flash('error', 'le fichier choisie n\'est pas une image ');
+
+            return redirect('logo');
+
+
+        }
+
+
+    }
 }

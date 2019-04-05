@@ -21,7 +21,7 @@ class CoordoneesController extends Controller
     public function index()
     {
         $coordonees = Coordonee::all();
-
+        defaultLog(Coordonee::class);
         return view('backEnd.admin.coordonees.index', compact('coordonees'));
     }
 
@@ -32,6 +32,8 @@ class CoordoneesController extends Controller
      */
     public function create()
     {
+
+        createLog(Coordonee::class);
         return view('backEnd.admin.coordonees.create');
     }
 
@@ -42,13 +44,16 @@ class CoordoneesController extends Controller
      */
     public function store(Request $request)
     {
-        
-        Coordonee::create($request->all());
 
-        Session::flash('message', 'Coordonee added!');
-        Session::flash('status', 'success');
 
-        return redirect('coordonee');
+        if ( Coordonee::create($request->all())) {
+            session()->flash('message', tableName(Coordonee::class).' ajouté avec succès, id = '.lastChild(Coordonee::class));
+            storeLog(Coordonee::class);
+            return redirect('coordonees');
+
+        }
+        createFailureLog(Coordonee::class);
+        return redirect('coordonees');
     }
 
     /**
@@ -60,9 +65,17 @@ class CoordoneesController extends Controller
      */
     public function show($id)
     {
-        $coordonee = Coordonee::findOrFail($id);
 
-        return view('backEnd.admin.coordonees.show', compact('coordonee'));
+        if (Coordonee::findOrFail($id))   {
+            $coordonees = Coordonee::findOrFail($id);
+            showLog(Coordonee::class,$id);
+            return view('backEnd.admin.coordonees.show', compact('coordonees'));
+        }
+
+        session()->flash('error', ' l\'arcticle n\'existe pas !');
+        showFailureLog(Coordonee::class,$id);
+        return view('backEnd.admin.coordonees.show', compact('coordonees'));
+
     }
 
     /**
@@ -74,9 +87,15 @@ class CoordoneesController extends Controller
      */
     public function edit($id)
     {
-        $coordonee = Coordonee::findOrFail($id);
 
-        return view('backEnd.admin.coordonees.edit', compact('coordonee'));
+        if (Coordonee::findOrFail($id))   {
+            $coordonees = Coordonee::findOrFail($id);
+            editLog(Coordonee::class,$id);
+            return view('backEnd.admin.coordonees.edit', compact('coordonees'));
+        }
+
+        editFailureLog(Coordonee::class,$id);
+        return view('backEnd.admin.coordonees.edit', compact('coordonees'));
     }
 
     /**
@@ -88,14 +107,23 @@ class CoordoneesController extends Controller
      */
     public function update($id, Request $request)
     {
-        
-        $coordonee = Coordonee::findOrFail($id);
-        $coordonee->update($request->all());
 
-        Session::flash('message', 'Coordonee updated!');
-        Session::flash('status', 'success');
 
-        return redirect('coordonee');
+        if (Coordonee::findOrFail($id)){
+            $coordonees =  Coordonee::findOrFail($id);
+
+            if ($coordonees->update($request->all())){
+                session()->flash('success', 'Coordonee mise à jours avec succès!');
+                updateLog(Coordonee::class,$id);
+                return redirect('coordonees');
+            }
+        }
+
+
+        session()->flash('error', 'Echec mise à jours , l\'arcticle n\'existe pas !');
+        updateFailureLog(Coordonee::class,$id);
+        return redirect('coordonees');
+
     }
 
     /**
@@ -107,13 +135,16 @@ class CoordoneesController extends Controller
      */
     public function destroy($id)
     {
-        $coordonee = Coordonee::findOrFail($id);
+        if (Coordonee::findOrFail($id))   {
+            $coordonees = Coordonee::findOrFail($id);
+            $coordonees->delete();
+            session()->flash('success', 'mise à jours avec effectué avec succes!');
+            deleteLog(Coordonee::class,$id);
+            return redirect('coordonees');
+        }
 
-        $coordonee->delete();
-
-        Session::flash('message', 'Coordonee deleted!');
-        Session::flash('status', 'success');
-
+        session()->flash('error', 'Echec suppression , l\'arcticle n\'existe pas !');
+        deleteFailureLog(Coordonee::class,$id);
         return redirect('coordonees');
     }
 

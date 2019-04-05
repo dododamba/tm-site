@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +16,7 @@ class ContactController extends Controller
     public function index()
     {
         $contact = Contact::all();
-
+        defaultLog(Contact::class);
         return view('backEnd.admin.contact.index', compact('contact'));
     }
 
@@ -28,6 +27,8 @@ class ContactController extends Controller
      */
     public function create()
     {
+
+        createLog(Contact::class);
         return view('backEnd.admin.contact.create');
     }
 
@@ -38,9 +39,15 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        
-        Contact::create($request->all());
 
+
+        if ( Contact::create($request->all())) {
+            session()->flash('message', tableName(Contact::class).' ajouté avec succès, id = '.lastChild(Contact::class));
+            storeLog(Contact::class);
+            return redirect('contact');
+
+        }
+        createFailureLog(Contact::class);
         return redirect('contact');
     }
 
@@ -53,9 +60,17 @@ class ContactController extends Controller
      */
     public function show($id)
     {
-        $contact = Contact::findOrFail($id);
 
+        if (Contact::findOrFail($id))   {
+            $contact = Contact::findOrFail($id);
+            showLog(Contact::class,$id);
+            return view('backEnd.admin.contact.show', compact('contact'));
+        }
+
+        session()->flash('error', ' l\'arcticle n\'existe pas !');
+        showFailureLog(Contact::class,$id);
         return view('backEnd.admin.contact.show', compact('contact'));
+
     }
 
     /**
@@ -67,8 +82,14 @@ class ContactController extends Controller
      */
     public function edit($id)
     {
-        $contact = Contact::findOrFail($id);
 
+        if (Contact::findOrFail($id))   {
+            $contact = Contact::findOrFail($id);
+            editLog(Contact::class,$id);
+            return view('backEnd.admin.contact.edit', compact('contact'));
+        }
+
+        editFailureLog(Contact::class,$id);
         return view('backEnd.admin.contact.edit', compact('contact'));
     }
 
@@ -81,12 +102,23 @@ class ContactController extends Controller
      */
     public function update($id, Request $request)
     {
-        
-        $contact = Contact::findOrFail($id);
-        $contact->update($request->all());
 
 
+        if (Contact::findOrFail($id)){
+            $contact =  Contact::findOrFail($id);
+
+            if ($contact->update($request->all())){
+                session()->flash('success', 'Contact mise à jours avec succès!');
+                updateLog(Contact::class,$id);
+                return redirect('contact');
+            }
+        }
+
+
+        session()->flash('error', 'Echec mise à jours , l\'arcticle n\'existe pas !');
+        updateFailureLog(Contact::class,$id);
         return redirect('contact');
+
     }
 
     /**
@@ -98,12 +130,16 @@ class ContactController extends Controller
      */
     public function destroy($id)
     {
-        $contact = Contact::findOrFail($id);
+        if (Contact::findOrFail($id))   {
+            $contact = Contact::findOrFail($id);
+            $contact->delete();
+            session()->flash('success', 'mise à jours avec effectué avec succes!');
+            deleteLog(Contact::class,$id);
+            return redirect('contact');
+        }
 
-        $contact->delete();
-
-
+        session()->flash('error', 'Echec suppression , l\'arcticle n\'existe pas !');
+        deleteFailureLog(Contact::class,$id);
         return redirect('contact');
     }
-
 }

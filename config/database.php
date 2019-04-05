@@ -73,7 +73,7 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
         ],
-       'pgsql_heroku' => [
+      /* 'pgsql_heroku' => [
             'driver' => 'pgsql',
             'host' => $DATABASE_URL["host"],
             'port' => $DATABASE_URL["port"],
@@ -84,7 +84,7 @@ return [
             'prefix' => '',
             'schema' => 'public',
             'sslmode' => 'require',
-        ],
+        ],*/
     ],
     /*
     |--------------------------------------------------------------------------

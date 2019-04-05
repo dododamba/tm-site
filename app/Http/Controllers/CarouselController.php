@@ -17,18 +17,11 @@ class CarouselController extends Controller
      *
      * @return Response
      */
-    public function index(Request $request)
+    public function index()
     {
         $carousel = Carousel::all();
-        $medias = Media::orderBy('created_at', 'desc')->get();
-
-
-        if ($request->session()->has('image')) {
-            session()->remove('image');
-            session()->remove('image_key');
-            return view('backEnd.admin.carousel.index', compact('carousel', 'medias'));
-        }
-        return view('backEnd.admin.carousel.index', compact('carousel', 'medias'));
+        defaultLog(Carousel::class);
+        return view('backEnd.admin.carousel.index', compact('carousel'));
     }
 
     /**
@@ -38,8 +31,9 @@ class CarouselController extends Controller
      */
     public function create()
     {
-        $medias = Media::orderBy('created_at', 'desc')->paginate(6);
-        return view('backEnd.admin.carousel.create', compact('medias'));
+
+        createLog(Carousel::class);
+        return view('backEnd.admin.carousel.create');
     }
 
     /**
@@ -51,41 +45,15 @@ class CarouselController extends Controller
     {
 
 
-        $image_key = (integer)$request->image;
+        if ( Carousel::create($request->all())) {
+            session()->flash('message', tableName(Carousel::class).' ajouté avec succès, id = '.lastChild(Carousel::class));
+            storeLog(Carousel::class);
+            return redirect('carousel');
 
-        $media = Media::findOrFail($image_key);
-
-        $data = [
-            'texte' => $request->texte,
-            'lien' => $request->lien,
-            'statut' => (integer)$request->statut,
-            'media' =>$image_key
-        ];
-
-         if (Carousel::create($data)) {
-
-                  if ($request->session()->has('image')) {
-                      session()->remove('image');
-                      session()->remove('image_key');
-                      session()->flash('message', 'Element de carousel ajouté avec succès');
-                      return redirect('carousel');
-                  }
-                  session()->flash('message', 'Element de carousel ajouté avec succès');
-                  return redirect('carousel');
-
-
-          }
-
-
-
-
-          Session::flash('message', 'Carousel added!');
-          Session::flash('status', 'success');
-
-          return redirect('carousel');
-
+        }
+        createFailureLog(Carousel::class);
+        return redirect('carousel');
     }
-
 
     /**
      * Display the specified resource.
@@ -96,9 +64,17 @@ class CarouselController extends Controller
      */
     public function show($id)
     {
-        $carousel = Carousel::findOrFail($id);
 
+        if (Carousel::findOrFail($id))   {
+            $carousel = Carousel::findOrFail($id);
+            showLog(Carousel::class,$id);
+            return view('backEnd.admin.carousel.show', compact('carousel'));
+        }
+
+        session()->flash('error', ' l\'arcticle n\'existe pas !');
+        showFailureLog(Carousel::class,$id);
         return view('backEnd.admin.carousel.show', compact('carousel'));
+
     }
 
     /**
@@ -110,8 +86,14 @@ class CarouselController extends Controller
      */
     public function edit($id)
     {
-        $carousel = Carousel::findOrFail($id);
 
+        if (Carousel::findOrFail($id))   {
+            $carousel = Carousel::findOrFail($id);
+            editLog(Carousel::class,$id);
+            return view('backEnd.admin.carousel.edit', compact('carousel'));
+        }
+
+        editFailureLog(Carousel::class,$id);
         return view('backEnd.admin.carousel.edit', compact('carousel'));
     }
 
@@ -124,14 +106,23 @@ class CarouselController extends Controller
      */
     public function update($id, Request $request)
     {
-        
-        $carousel = Carousel::findOrFail($id);
-        $carousel->update($request->all());
 
-        session()->flash('message', 'Carousel updated!');
-        session()->flash('status', 'success');
 
+        if (Carousel::findOrFail($id)){
+            $carousel =  Carousel::findOrFail($id);
+
+            if ($carousel->update($request->all())){
+                session()->flash('success', 'Carousel mise à jours avec succès!');
+                updateLog(Carousel::class,$id);
+                return redirect('carousel');
+            }
+        }
+
+
+        session()->flash('error', 'Echec mise à jours , l\'arcticle n\'existe pas !');
+        updateFailureLog(Carousel::class,$id);
         return redirect('carousel');
+
     }
 
     /**
@@ -143,14 +134,16 @@ class CarouselController extends Controller
      */
     public function destroy($id)
     {
-        $carousel = Carousel::findOrFail($id);
+        if (Carousel::findOrFail($id))   {
+            $carousel = Carousel::findOrFail($id);
+            $carousel->delete();
+            session()->flash('success', 'mise à jours avec effectué avec succes!');
+            deleteLog(Carousel::class,$id);
+            return redirect('carousel');
+        }
 
-        $carousel->delete();
-
-        session()->flash('message', 'Carousel deleted!');
-        session()->flash('status', 'success');
-
+        session()->flash('error', 'Echec suppression , l\'arcticle n\'existe pas !');
+        deleteFailureLog(Carousel::class,$id);
         return redirect('carousel');
     }
-
 }

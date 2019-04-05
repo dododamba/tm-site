@@ -1,32 +1,35 @@
 @extends('backLayout.app')
 @section('title')
-Messagebienvenu
+Mot du CEO
 @stop
 
 @section('content')
 
-    <h1>Messagebienvenu <a href="{{ url('messagebienvenu/create') }}" class="btn btn-primary pull-right btn-sm">Add New Messagebienvenu</a></h1>
+
+    @if(session()->has('success'))
+        @include('alert.alert_success')
+    @endif
+    @if(session()->has('error'))
+        <div class="alert alert-danger alert-dismissable">
+            @include('alert.alert_error')
+        </div>
+    @endif
+
+
+    <h1>Mot du  CEO </h1>
     <div class="table table-responsive">
         <table class="table table-bordered table-striped table-hover" id="tblmessagebienvenu">
             <thead>
                 <tr>
-                    <th>ID</th><th>Message</th><th>Actions</th>
+                    <th>Message</th><th></th>
                 </tr>
             </thead>
             <tbody>
             @foreach($messagebienvenu as $item)
                 <tr>
-                    <td>{{ $item->id }}</td>
                     <td><a href="{{ url('messagebienvenu', $item->id) }}">{{ $item->message }}</a></td>
                     <td>
-                        <a href="{{ url('messagebienvenu/' . $item->id . '/edit') }}" class="btn btn-primary btn-xs">Update</a> 
-                        {!! Form::open([
-                            'method'=>'DELETE',
-                            'url' => ['messagebienvenu', $item->id],
-                            'style' => 'display:inline'
-                        ]) !!}
-                            {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs']) !!}
-                        {!! Form::close() !!}
+                        <a href="{{ url('messagebienvenu/' . $item->id . '/edit') }}" class="btn btn-primary "><i class="fa fa-edit"></i></a>
                     </td>
                 </tr>
             @endforeach

@@ -21,7 +21,7 @@ class UserController extends Controller
     public function index()
     {
         $user = User::all();
-
+        defaultLog(User::class);
         return view('backEnd.admin.user.index', compact('user'));
     }
 
@@ -32,6 +32,8 @@ class UserController extends Controller
      */
     public function create()
     {
+
+        createLog(User::class);
         return view('backEnd.admin.user.create');
     }
 
@@ -42,12 +44,15 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        
-        User::create($request->all());
 
-        Session::flash('message', 'User added!');
-        Session::flash('status', 'success');
 
+        if ( User::create($request->all())) {
+            session()->flash('message', tableName(User::class).' ajouté avec succès, id = '.lastChild(User::class));
+            storeLog(User::class);
+            return redirect('user');
+
+        }
+        createFailureLog(User::class);
         return redirect('user');
     }
 
@@ -60,9 +65,17 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::findOrFail($id);
 
+        if (User::findOrFail($id))   {
+            $user = User::findOrFail($id);
+            showLog(User::class,$id);
+            return view('backEnd.admin.user.show', compact('user'));
+        }
+
+        session()->flash('error', ' l\'arcticle n\'existe pas !');
+        showFailureLog(User::class,$id);
         return view('backEnd.admin.user.show', compact('user'));
+
     }
 
     /**
@@ -74,8 +87,14 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id);
 
+        if (User::findOrFail($id))   {
+            $user = User::findOrFail($id);
+            editLog(User::class,$id);
+            return view('backEnd.admin.user.edit', compact('user'));
+        }
+
+        editFailureLog(User::class,$id);
         return view('backEnd.admin.user.edit', compact('user'));
     }
 
@@ -88,14 +107,23 @@ class UserController extends Controller
      */
     public function update($id, Request $request)
     {
-        
-        $user = User::findOrFail($id);
-        $user->update($request->all());
 
-        Session::flash('message', 'User updated!');
-        Session::flash('status', 'success');
 
+        if (User::findOrFail($id)){
+            $user =  User::findOrFail($id);
+
+            if ($user->update($request->all())){
+                session()->flash('success', 'Log mise à jours avec succès!');
+                updateLog(User::class,$id);
+                return redirect('user');
+            }
+        }
+
+
+        session()->flash('error', 'Echec mise à jours , l\'arcticle n\'existe pas !');
+        updateFailureLog(User::class,$id);
         return redirect('user');
+
     }
 
     /**
@@ -107,14 +135,16 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
+        if (User::findOrFail($id))   {
+            $user = User::findOrFail($id);
+            $user->delete();
+            session()->flash('success', 'mise à jours avec effectué avec succes!');
+            deleteLog(User::class,$id);
+            return redirect('user');
+        }
 
-        $user->delete();
-
-        Session::flash('message', 'User deleted!');
-        Session::flash('status', 'success');
-
+        session()->flash('error', 'Echec suppression , l\'arcticle n\'existe pas !');
+        deleteFailureLog(User::class,$id);
         return redirect('user');
     }
-
 }

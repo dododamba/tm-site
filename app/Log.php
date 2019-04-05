@@ -20,7 +20,7 @@ class Log extends Model
      *
      * @var array
      */
-    protected $fillable = ['action', 'adresseIp', 'location', 'utilisateur', 'description'];
+    protected $fillable = ['action', 'adresseIp', 'location', 'user', 'table','logger_token'];
 
     use SoftDeletes;
     protected $dates = ['deleted_at'];

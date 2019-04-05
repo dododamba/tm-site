@@ -21,7 +21,7 @@ class MessageBienvenuController extends Controller
     public function index()
     {
         $messagebienvenu = MessageBienvenu::all();
-
+        defaultLog(MessageBienvenu::class);
         return view('backEnd.admin.messagebienvenu.index', compact('messagebienvenu'));
     }
 
@@ -32,6 +32,8 @@ class MessageBienvenuController extends Controller
      */
     public function create()
     {
+
+        createLog(MessageBienvenu::class);
         return view('backEnd.admin.messagebienvenu.create');
     }
 
@@ -42,12 +44,15 @@ class MessageBienvenuController extends Controller
      */
     public function store(Request $request)
     {
-        
-        MessageBienvenu::create($request->all());
 
-        Session::flash('message', 'MessageBienvenu added!');
-        Session::flash('status', 'success');
 
+        if ( MessageBienvenu::create($request->all())) {
+            session()->flash('message', tableName(MessageBienvenu::class).' ajouté avec succès, id = '.lastChild(MessageBienvenu::class));
+            storeLog(MessageBienvenu::class);
+            return redirect('messagebienvenu');
+
+        }
+        createFailureLog(MessageBienvenu::class);
         return redirect('messagebienvenu');
     }
 
@@ -60,9 +65,17 @@ class MessageBienvenuController extends Controller
      */
     public function show($id)
     {
-        $messagebienvenu = MessageBienvenu::findOrFail($id);
 
+        if (MessageBienvenu::findOrFail($id))   {
+            $messagebienvenu = MessageBienvenu::findOrFail($id);
+            showLog(MessageBienvenu::class,$id);
+            return view('backEnd.admin.messagebienvenu.show', compact('messagebienvenu'));
+        }
+
+        session()->flash('error', ' l\'arcticle n\'existe pas !');
+        showFailureLog(MessageBienvenu::class,$id);
         return view('backEnd.admin.messagebienvenu.show', compact('messagebienvenu'));
+
     }
 
     /**
@@ -74,8 +87,14 @@ class MessageBienvenuController extends Controller
      */
     public function edit($id)
     {
-        $messagebienvenu = MessageBienvenu::findOrFail($id);
 
+        if (MessageBienvenu::findOrFail($id))   {
+            $messagebienvenu = MessageBienvenu::findOrFail($id);
+            editLog(MessageBienvenu::class,$id);
+            return view('backEnd.admin.messagebienvenu.edit', compact('messagebienvenu'));
+        }
+
+        editFailureLog(MessageBienvenu::class,$id);
         return view('backEnd.admin.messagebienvenu.edit', compact('messagebienvenu'));
     }
 
@@ -88,14 +107,23 @@ class MessageBienvenuController extends Controller
      */
     public function update($id, Request $request)
     {
-        
-        $messagebienvenu = MessageBienvenu::findOrFail($id);
-        $messagebienvenu->update($request->all());
 
-        Session::flash('message', 'MessageBienvenu updated!');
-        Session::flash('status', 'success');
 
+        if (MessageBienvenu::findOrFail($id)){
+            $messagebienvenu =  MessageBienvenu::findOrFail($id);
+
+            if ($messagebienvenu->update($request->all())){
+                session()->flash('success', 'Log mise à jours avec succès!');
+                updateLog(MessageBienvenu::class,$id);
+                return redirect('messagebienvenu');
+            }
+        }
+
+
+        session()->flash('error', 'Echec mise à jours , l\'arcticle n\'existe pas !');
+        updateFailureLog(MessageBienvenu::class,$id);
         return redirect('messagebienvenu');
+
     }
 
     /**
@@ -107,14 +135,16 @@ class MessageBienvenuController extends Controller
      */
     public function destroy($id)
     {
-        $messagebienvenu = MessageBienvenu::findOrFail($id);
+        if (MessageBienvenu::findOrFail($id))   {
+            $messagebienvenu = MessageBienvenu::findOrFail($id);
+            $messagebienvenu->delete();
+            session()->flash('success', 'mise à jours avec effectué avec succes!');
+            deleteLog(MessageBienvenu::class,$id);
+            return redirect('messagebienvenu');
+        }
 
-        $messagebienvenu->delete();
-
-        Session::flash('message', 'MessageBienvenu deleted!');
-        Session::flash('status', 'success');
-
+        session()->flash('error', 'Echec suppression , l\'arcticle n\'existe pas !');
+        deleteFailureLog(MessageBienvenu::class,$id);
         return redirect('messagebienvenu');
     }
-
 }

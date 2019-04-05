@@ -4,22 +4,7 @@ use App\File as File;
 use App\Log as SenseiLogger;
 use Auth as LaravelAuth;
 use Illuminate\Support\Str as Str;
-
-if (!function_exists('createLog')) {
-    function createLog($action, $description)
-    {
-        SenseiLogger::create(
-            [
-                'action' => $action,
-                'adresseIp' => getIpAdress(),
-                'location' =>getLocation(),
-                'utilisateur' => getCurrentUser(),
-                'description' => $description,
-                'slug' => 'tmp_user_log_'
-            ]
-        );
-    }
-}
+use Illuminate\Support\Facades\Config as Conf;
 
 
 if (!function_exists('getIpAdress')) {
@@ -97,6 +82,34 @@ if (!function_exists('name_generator')) {
 }
 
 
+if (!function_exists('tableName')) {
+    function tableName($model)
+    {
+
+        return (new $model())->getTable();
+    }
+}
+
+
+if (!function_exists('itemId')) {
+    function itemId($model)
+    {
+        return (new $model())->id;
+    }
+}
+
+
+if (!function_exists('lastChild')) {
+
+    function lastChild($model)
+    {
+        $last_child = (new $model())::orderBy('created_at', 'desc')->first();
+        return $last_child->id;
+    }
+}
+
+
+
 if (!function_exists('number_randomize')) {
     function number_randomize($length)
     {
@@ -110,4 +123,235 @@ if (!function_exists('number_randomize')) {
         return $randomString;
     }
 
+}
+
+
+if (!function_exists('defaultLog')) {
+    function defaultLog($model)
+    {
+        SenseiLogger::create(
+            [
+                'action' => Conf::get('constants.DEFAULT_ACTION'),
+                'adresseIp' => getIpAdress(),
+                'location' =>getLocation(),
+                'user' => getCurrentUser(),
+                'table' =>tableName($model),
+                'logger_token'=>str_randomize(70)
+            ]
+        );
+    }
+}
+
+
+if (!function_exists('createLog')) {
+    function createLog($model)
+    {
+        SenseiLogger::create(
+            [
+                'action' => Conf::get('constants.CREATE_ACTION'),
+                'adresseIp' => getIpAdress(),
+                'location' =>getLocation(),
+                'user' => getCurrentUser(),
+                'table' =>tableName($model),
+                'logger_token'=>str_randomize(70)
+            ]
+        );
+    }
+}
+
+
+if (!function_exists('createFailureLog')) {
+    function createFailureLog($model)
+    {
+        SenseiLogger::create(
+            [
+                'action' => Conf::get('constants.CREATE_FAILURE_ACTION'),
+                'adresseIp' => getIpAdress(),
+                'location' =>getLocation(),
+                'user' => getCurrentUser(),
+                'table' =>tableName($model),
+                'logger_token'=>str_randomize(70)
+            ]
+        );
+    }
+}
+
+
+if (!function_exists('showLog')) {
+    function showLog($model,$id)
+    {
+        SenseiLogger::create(
+            [
+                'action' => Conf::get('constants.SHOW_ACTION').', item id : '.$id,
+                'adresseIp' => getIpAdress(),
+                'location' =>getLocation(),
+                'user' => getCurrentUser(),
+                'table' =>tableName($model),
+                'logger_token'=>str_randomize(70)
+            ]
+        );
+    }
+}
+
+
+if (!function_exists('showFailureLog')) {
+    function showFailureLog($model,$id)
+    {
+        SenseiLogger::create(
+            [
+                'action' => Conf::get('constants.SHOW_FAILURE_ACTION').', item id : '.$id,
+                'adresseIp' => getIpAdress(),
+                'location' =>getLocation(),
+                'user' => getCurrentUser(),
+                'table' =>tableName($model),
+                'logger_token'=>str_randomize(70)
+            ]
+        );
+    }
+}
+
+
+if (!function_exists('editLog')) {
+    function editLog($model,$id)
+    {
+        SenseiLogger::create(
+            [
+                'action' => Conf::get('constants.EDIT_ACTION').', item id : '.$id,
+                'adresseIp' => getIpAdress(),
+                'location' =>getLocation(),
+                'user' => getCurrentUser(),
+                'table' =>tableName($model),
+                'logger_token'=>str_randomize(70)
+            ]
+        );
+    }
+}
+
+
+if (!function_exists('editFailureLog')) {
+    function editFailureLog($model,$id)
+    {
+        SenseiLogger::create(
+            [
+                'action' => Conf::get('constants.EDIT_FAILURE_ACTION').', item id : '.$id,
+                'adresseIp' => getIpAdress(),
+                'location' =>getLocation(),
+                'user' => getCurrentUser(),
+                'table' =>tableName($model),
+                'logger_token'=>str_randomize(70)
+            ]
+        );
+    }
+}
+
+
+if (!function_exists('updateLog')) {
+    function updateLog($model,$id)
+    {
+        SenseiLogger::create(
+            [
+                'action' => Conf::get('constants.UPDATE_ACTION').', item id : '.$id,
+                'adresseIp' => getIpAdress(),
+                'location' =>getLocation(),
+                'user' => getCurrentUser(),
+                'table' =>tableName($model),
+                'logger_token'=>str_randomize(70)
+            ]
+        );
+    }
+}
+
+
+if (!function_exists('updateFailureLog')) {
+    function updateFailureLog($model,$id)
+    {
+        SenseiLogger::create(
+            [
+                'action' => Conf::get('constants.UPDATE_FAILURE_ACTION').', item id : '.$id,
+                'adresseIp' => getIpAdress(),
+                'location' =>getLocation(),
+                'user' => getCurrentUser(),
+                'table' =>tableName($model),
+                'logger_token'=>str_randomize(70)
+            ]
+        );
+    }
+}
+
+
+
+if (!function_exists('storeLog')) {
+    function storeLog($model)
+    {
+        SenseiLogger::store(
+            [
+                'action' => Conf::get('constants.STORE_ACTION').', item id : ',
+                'adresseIp' => getIpAdress(),
+                'location' =>getLocation(),
+                'user' => getCurrentUser(),
+                'table' =>tableName($model),
+                'logger_token'=>str_randomize(70)
+            ]
+        );
+    }
+}
+
+
+if (!function_exists('storeFailureLog')) {
+    function storeFailureLog($model)
+    {
+        SenseiLogger::store(
+            [
+                'action' => Conf::get('constants.STORE_FAILURE_ACTION').', item id : ',
+                'adresseIp' => getIpAdress(),
+                'location' =>getLocation(),
+                'user' => getCurrentUser(),
+                'table' =>tableName($model),
+                'logger_token'=>str_randomize(70)
+            ]
+        );
+    }
+}
+
+
+if (!function_exists('deleteLog')) {
+    function deleteLog($model,$id)
+    {
+        SenseiLogger::store(
+            [
+                'action' => Conf::get('constants.DELETE_ACTION').', item id : '.$id,
+                'adresseIp' => getIpAdress(),
+                'location' =>getLocation(),
+                'user' => getCurrentUser(),
+                'table' =>tableName($model),
+                'logger_token'=>str_randomize(70)
+            ]
+        );
+    }
+}
+
+
+if (!function_exists('deleteFailureLog')) {
+    function deleteFailureLog($model,$id)
+    {
+        SenseiLogger::store(
+            [
+                'action' => Conf::get('constants.DELETE_FAILURE_ACTION').', item id : '.$id,
+                'adresseIp' => getIpAdress(),
+                'location' =>getLocation(),
+                'user' => getCurrentUser(),
+                'table' =>tableName($model),
+                'logger_token'=>str_randomize(70)
+            ]
+        );
+    }
+}
+
+
+
+if (!function_exists('countElement')) {
+    function countElement($model)
+    {
+        return (new $model())::all()->count();
+    }
 }

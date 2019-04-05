@@ -5,7 +5,17 @@ Service
 
 @section('content')
 
-    <h1>Service <a href="{{ url('service/create') }}" class="btn btn-primary pull-right btn-sm">Add New Service</a></h1>
+    @if(session()->has('success'))
+        @include('alert.alert_success')
+    @endif
+    @if(session()->has('error'))
+        <div class="alert alert-danger alert-dismissable">
+            @include('alert.alert_error')
+        </div>
+    @endif
+
+
+    <h1>Service <a href="{{ url('service/create') }}" class="btn btn-primary pull-right ">+</a></h1>
     <div class="table table-responsive">
         <table class="table table-bordered table-striped table-hover" id="tblservice">
             <thead>

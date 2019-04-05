@@ -21,7 +21,7 @@ class IconController extends Controller
     public function index()
     {
         $icon = Icon::all();
-
+        defaultLog(Icon::class);
         return view('backEnd.admin.icon.index', compact('icon'));
     }
 
@@ -32,6 +32,8 @@ class IconController extends Controller
      */
     public function create()
     {
+
+        createLog(Icon::class);
         return view('backEnd.admin.icon.create');
     }
 
@@ -42,13 +44,16 @@ class IconController extends Controller
      */
     public function store(Request $request)
     {
-        
-        Icon::create($request->all());
 
-        session()->flash('message', 'Icon added!');
-        session()->flash('status', 'success');
 
-        return redirect('icons');
+        if ( Icon::create($request->all())) {
+            session()->flash('message', tableName(Icon::class).' ajouté avec succès, id = '.lastChild(Icon::class));
+            storeLog(Icon::class);
+            return redirect('icon');
+
+        }
+        createFailureLog(Icon::class);
+        return redirect('icon');
     }
 
     /**
@@ -60,9 +65,17 @@ class IconController extends Controller
      */
     public function show($id)
     {
-        $icon = Icon::findOrFail($id);
 
+        if (Icon::findOrFail($id))   {
+            $icon = Icon::findOrFail($id);
+            showLog(Icon::class,$id);
+            return view('backEnd.admin.icon.show', compact('icon'));
+        }
+
+        session()->flash('error', ' l\'arcticle n\'existe pas !');
+        showFailureLog(Icon::class,$id);
         return view('backEnd.admin.icon.show', compact('icon'));
+
     }
 
     /**
@@ -74,8 +87,14 @@ class IconController extends Controller
      */
     public function edit($id)
     {
-        $icon = Icon::findOrFail($id);
 
+        if (Icon::findOrFail($id))   {
+            $icon = Icon::findOrFail($id);
+            editLog(Icon::class,$id);
+            return view('backEnd.admin.icon.edit', compact('icon'));
+        }
+
+        editFailureLog(Icon::class,$id);
         return view('backEnd.admin.icon.edit', compact('icon'));
     }
 
@@ -88,14 +107,23 @@ class IconController extends Controller
      */
     public function update($id, Request $request)
     {
-        
-        $icon = Icon::findOrFail($id);
-        $icon->update($request->all());
 
-        session()->flash('message', 'Icon updated!');
-        session()->flash('status', 'success');
 
-        return redirect('icons');
+        if (Icon::findOrFail($id)){
+            $icon =  Icon::findOrFail($id);
+
+            if ($icon->update($request->all())){
+                session()->flash('success', 'Icon mise à jours avec succès!');
+                updateLog(Icon::class,$id);
+                return redirect('icon');
+            }
+        }
+
+
+        session()->flash('error', 'Echec mise à jours , l\'arcticle n\'existe pas !');
+        updateFailureLog(Icon::class,$id);
+        return redirect('icon');
+
     }
 
     /**
@@ -107,14 +135,17 @@ class IconController extends Controller
      */
     public function destroy($id)
     {
-        $icon = Icon::findOrFail($id);
+        if (Icon::findOrFail($id))   {
+            $icon = Icon::findOrFail($id);
+            $icon->delete();
+            session()->flash('success', 'mise à jours avec effectué avec succes!');
+            deleteLog(Icon::class,$id);
+            return redirect('icon');
+        }
 
-        $icon->delete();
-
-        session()->flash('message', 'Icon deleted!');
-        session()->flash('status', 'success');
-
-        return redirect('icons');
+        session()->flash('error', 'Echec suppression , l\'arcticle n\'existe pas !');
+        deleteFailureLog(Icon::class,$id);
+        return redirect('icon');
     }
 
 }

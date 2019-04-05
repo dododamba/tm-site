@@ -21,6 +21,7 @@ class ProfileController extends Controller
     public function index()
     {
       $user = User::findOrFail(Auth::user()->id);
+      createLog(User::class);
       return view('backEnd.admin.user.profile',compact($user));
     }
 
@@ -30,34 +31,43 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    protected function updated($data,$id)
+    protected function updated(Request $request,$id)
     {
-        $user =  User::findOrFail($id);
+        if ( User::findOrFail($id))  {
+            $user =  User::findOrFail($id);
 
-        $data = [
-          'first_name' => $user->first_name,
-          'middle_name' => $user->middle_name,
-          'last_name' => $user->last_name,
-          'email' => $user->email,
-          'password' => $user->password,
-          'username' => $user->username,
-          'role' => $user->role,
-          'statut' => $user->statut
-        ];
-
-        $user->update($data);
-    }
+            $data = [
+                'first_name' => $user->first_name,
+                'middle_name' => $user->middle_name,
+                'last_name' => $user->last_name,
+                'email' => $user->email,
+                'password' => $user->password,
+                'username' => $user->username,
+                'role' => $user->role,
+                'statut' => $user->statut
+            ];
 
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    protected function show($id)
-    {
-        return User::findOrFail($id);
+               if ($user->update($data)) {
+                    updateLog(User::class,$id);
+                    session()->flash('success','Mise à effectué');
+                   return view('backEnd.admin.user.profile',compact($user));
+
+               }else{
+                   updateFailureLog(User::class,$id);
+                   session()->flash('error','Echec mise à jours');
+                   return view('backEnd.admin.user.profile',compact($user));
+
+               }
+
+
+        }
+
+
+            updateLog(User::class,$id);
+            session()->flash('error','Mise effectué');
+            return view('backEnd.admin.user.index');
+
     }
 
 
@@ -99,17 +109,6 @@ class ProfileController extends Controller
       }
     }
 
-    public function basic_email() {
-          $data = array('name'=>"Sensei takezo");
-
-          Mail::send(['text'=>'mail.password_updated'], $data, function($message) {
-             $message->to('dominicdamba95@gmail.com', 'Tutorials Point')->subject
-                ('Laravel Basic Testing Mail');
-             $message->from('dominicdamba95@gmail.com','Dominique DAMBA');
-          });
-          echo "Basic Email Sent. Check your inbox.";
-       }
-
 
   public function changeMyPersonnalInformation(Request $request)
   {
@@ -120,12 +119,6 @@ class ProfileController extends Controller
     $username = $request->username;
     $email = $request->email;
 
-
-
-    $new_first_name = '';
-    $new_last_name = '';
-    $new_username = '';
-    $new_email = '';
 
     $user = $this->show($loged_user_id);
     $password = $request->password;
@@ -158,7 +151,8 @@ class ProfileController extends Controller
 
 
     if (empty($password)) {
-      flashy()->error('Entrez votre mot de pass pour confirmer la modification','');
+        updateFailureLog(User::class,$loged_user_id);
+        session()->flash('error','Entrez votre mot de pass pour confirmer la modification');
       return redirect('/my-profile');
     }else {
       if (Hash::check($password, $hashedPassword)) {
@@ -173,11 +167,13 @@ class ProfileController extends Controller
         ];
 
         $user->update($data);
-        flashy()->success('Mise à jours effectué avec succès', '');
-        return redirect('/my-profile');
+          updateLog(User::class,$loged_user_id);
+          session()->flash('success','Mise à effectué');
+          return redirect('/my-profile');
 
       }else {
-        flashy()->error('Le mot de pass que vous avez saisie est incorrect','');
+          updateFailureLog(User::class,$loged_user_id);
+          session()->flash('error','Le mot de pass que vous avez saisie est incorrect');
         return redirect('/my-profile');
       }
     }

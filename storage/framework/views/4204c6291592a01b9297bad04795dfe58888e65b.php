@@ -6,6 +6,10 @@ Carousel
 
     <h1>Carousel <a href=" <?php echo e(route('carousel.create')); ?>"  class="btn btn-primary pull-right btn-sm"  >+</a></h1>
 
+   
+
+
+
     <div id="DemoModal9" class="modal fade "> <!-- class modal and fade -->
 
         <div class="modal-dialog modal-lg">

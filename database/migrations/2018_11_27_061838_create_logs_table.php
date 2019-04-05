@@ -16,10 +16,11 @@ class CreateLogsTable extends Migration
             Schema::create('logs', function(Blueprint $table) {
                 $table->increments('id');
                 $table->string('action');
-$table->string('adresseIp');
-$table->string('location');
-$table->string('utilisateur');
-$table->text('description');
+                $table->string('adresseIp');
+                $table->string('location');
+                $table->string('user');
+                $table->string('table');
+                $table->string('logger_token');
                 $table->timestamps();
                 $table->softDeletes();
             });

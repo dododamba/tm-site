@@ -18,7 +18,7 @@ class AProposController extends Controller
     public function index()
     {
         $apropos = APropo::all();
-        createLog('Consultation', 'Ouverture de la list de apropos');
+        defaultLog(APropo::class);
         return view('backEnd.admin.apropos.index', compact('apropos'));
     }
 
@@ -29,7 +29,8 @@ class AProposController extends Controller
      */
     public function create()
     {
-        createLog('Consultation', 'Ouverture de la de creation a propos');
+
+        createLog(APropo::class);
         return view('backEnd.admin.apropos.create');
     }
 
@@ -41,8 +42,14 @@ class AProposController extends Controller
     public function store(Request $request)
     {
 
-        APropo::create($request->all());
-        createLog('Creation', 'creation de apropos');
+
+       if ( APropo::create($request->all())) {
+           session()->flash('message', tableName(APropo::class).' ajouté avec succès, id = '.lastChild(APropo::class));
+           storeLog(APropo::class);
+           return redirect('apropos');
+
+       }
+        createFailureLog(APropo::class);
         return redirect('apropos');
     }
 
@@ -55,9 +62,17 @@ class AProposController extends Controller
      */
     public function show($id)
     {
-        $apropo = APropo::findOrFail($id);
-        createLog('Consultation', 'accès ressource specifique apropo ' . $apropo->id);
-        return view('backEnd.admin.apropos.show', compact('apropo'));
+
+        if (APropo::findOrFail($id))   {
+            $apropos = APropo::findOrFail($id);
+            showLog(APropo::class,$id);
+            return view('backEnd.admin.apropos.show', compact('apropos'));
+        }
+
+        session()->flash('error', ' l\'arcticle n\'existe pas !');
+        showFailureLog(APropo::class,$id);
+        return view('backEnd.admin.apropos.show', compact('apropos'));
+
     }
 
     /**
@@ -69,9 +84,15 @@ class AProposController extends Controller
      */
     public function edit($id)
     {
-        $apropo = APropo::findOrFail($id);
-        createLog('Modification', 'Ouverture de la page de modification de a propos id = ' . $apropo->id);
-        return view('backEnd.admin.apropos.edit', compact('apropo'));
+
+        if (APropo::findOrFail($id))   {
+            $apropos = APropo::findOrFail($id);
+            editLog(APropo::class,$id);
+            return view('backEnd.admin.apropos.edit', compact('apropos'));
+        }
+
+         editFailureLog(APropo::class,$id);
+        return view('backEnd.admin.apropos.edit', compact('apropos'));
     }
 
     /**
@@ -83,11 +104,23 @@ class AProposController extends Controller
      */
     public function update($id, Request $request)
     {
-        $apropo = APropo::findOrFail($id);
-        $apropo->update($request->all());
-        createLog('Modification', 'modification de  a propos id= ' . $apropo->id);
 
+
+       if (APropo::findOrFail($id)){
+           $apropo =  APropo::findOrFail($id);
+
+           if ($apropo->update($request->all())){
+               session()->flash('success', 'Carousel mise à jours avec succès!');
+               updateLog(APropo::class,$id);
+               return redirect('apropos');
+           }
+       }
+
+
+        session()->flash('error', 'Echec mise à jours , l\'arcticle n\'existe pas !');
+        updateFailureLog(APropo::class,$id);
         return redirect('apropos');
+
     }
 
     /**
@@ -99,12 +132,17 @@ class AProposController extends Controller
      */
     public function destroy($id)
     {
-        $apropo = APropo::findOrFail($id);
-        $id = $apropo->id;
-        $apropo->delete();
-        createLog('Suppression', 'Suppression de  a propos id= ' . $id);
+        if (APropo::findOrFail($id))   {
+            $apropo = APropo::findOrFail($id);
+            $apropo->delete();
+            session()->flash('success', 'mise à jours avec effectué avec succes!');
+            deleteLog(APropo::class,$id);
+            return redirect('carousel');
+        }
 
-        return redirect('apropos');
+        session()->flash('error', 'Echec suppression , l\'arcticle n\'existe pas !');
+           deleteFailureLog(APropo::class,$id);
+        return redirect('carousel');
     }
 
 }

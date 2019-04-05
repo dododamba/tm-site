@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 
 use App\Produit;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Session;
 
-class ProduitController extends Controller
+class ProduitController
 {
+
 
     /**
      * Display a listing of the resource.
@@ -21,7 +17,7 @@ class ProduitController extends Controller
     public function index()
     {
         $produit = Produit::all();
-
+        defaultLog(Produit::class);
         return view('backEnd.admin.produit.index', compact('produit'));
     }
 
@@ -32,6 +28,8 @@ class ProduitController extends Controller
      */
     public function create()
     {
+
+        createLog(Produit::class);
         return view('backEnd.admin.produit.create');
     }
 
@@ -42,12 +40,15 @@ class ProduitController extends Controller
      */
     public function store(Request $request)
     {
-        
-        Produit::create($request->all());
 
-        Session::flash('message', 'Produit added!');
-        Session::flash('status', 'success');
 
+        if ( Produit::create($request->all())) {
+            session()->flash('message', tableName(Produit::class).' ajouté avec succès, id = '.lastChild(Produit::class));
+            storeLog(Produit::class);
+            return redirect('produit');
+
+        }
+        createFailureLog(Produit::class);
         return redirect('produit');
     }
 
@@ -60,9 +61,17 @@ class ProduitController extends Controller
      */
     public function show($id)
     {
-        $produit = Produit::findOrFail($id);
 
+        if (Produit::findOrFail($id))   {
+            $produit = Produit::findOrFail($id);
+            showLog(Produit::class,$id);
+            return view('backEnd.admin.produit.show', compact('produit'));
+        }
+
+        session()->flash('error', ' l\'arcticle n\'existe pas !');
+        showFailureLog(Produit::class,$id);
         return view('backEnd.admin.produit.show', compact('produit'));
+
     }
 
     /**
@@ -74,8 +83,14 @@ class ProduitController extends Controller
      */
     public function edit($id)
     {
-        $produit = Produit::findOrFail($id);
 
+        if (Produit::findOrFail($id))   {
+            $produit = Produit::findOrFail($id);
+            editLog(Produit::class,$id);
+            return view('backEnd.admin.produit.edit', compact('produit'));
+        }
+
+        editFailureLog(Produit::class,$id);
         return view('backEnd.admin.produit.edit', compact('produit'));
     }
 
@@ -88,14 +103,23 @@ class ProduitController extends Controller
      */
     public function update($id, Request $request)
     {
-        
-        $produit = Produit::findOrFail($id);
-        $produit->update($request->all());
 
-        Session::flash('message', 'Produit updated!');
-        Session::flash('status', 'success');
 
+        if (Produit::findOrFail($id)){
+            $produit =  Produit::findOrFail($id);
+
+            if ($produit->update($request->all())){
+                session()->flash('success', 'Produit mise à jours avec succès!');
+                updateLog(Produit::class,$id);
+                return redirect('produit');
+            }
+        }
+
+
+        session()->flash('error', 'Echec mise à jours , l\'arcticle n\'existe pas !');
+        updateFailureLog(Produit::class,$id);
         return redirect('produit');
+
     }
 
     /**
@@ -107,14 +131,16 @@ class ProduitController extends Controller
      */
     public function destroy($id)
     {
-        $produit = Produit::findOrFail($id);
+        if (Produit::findOrFail($id))   {
+            $produit = Produit::findOrFail($id);
+            $produit->delete();
+            session()->flash('success', 'mise à jours avec effectué avec succes!');
+            deleteLog(Produit::class,$id);
+            return redirect('produit');
+        }
 
-        $produit->delete();
-
-        Session::flash('message', 'Produit deleted!');
-        Session::flash('status', 'success');
-
+        session()->flash('error', 'Echec suppression , l\'arcticle n\'existe pas !');
+        deleteFailureLog(Produit::class,$id);
         return redirect('produit');
     }
-
 }

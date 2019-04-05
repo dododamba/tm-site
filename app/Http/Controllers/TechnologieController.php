@@ -21,7 +21,7 @@ class TechnologieController extends Controller
     public function index()
     {
         $technologie = Technologie::all();
-
+        defaultLog(Technologie::class);
         return view('backEnd.admin.technologie.index', compact('technologie'));
     }
 
@@ -32,6 +32,8 @@ class TechnologieController extends Controller
      */
     public function create()
     {
+
+        createLog(Technologie::class);
         return view('backEnd.admin.technologie.create');
     }
 
@@ -42,12 +44,15 @@ class TechnologieController extends Controller
      */
     public function store(Request $request)
     {
-        
-        Technologie::create($request->all());
 
-        Session::flash('message', 'Technologie added!');
-        Session::flash('status', 'success');
 
+        if ( Technologie::create($request->all())) {
+            session()->flash('message', tableName(Technologie::class).' ajouté avec succès, id = '.lastChild(Technologie::class));
+            storeLog(Technologie::class);
+            return redirect('technologie');
+
+        }
+        createFailureLog(Technologie::class);
         return redirect('technologie');
     }
 
@@ -60,9 +65,17 @@ class TechnologieController extends Controller
      */
     public function show($id)
     {
-        $technologie = Technologie::findOrFail($id);
 
+        if (Technologie::findOrFail($id))   {
+            $technologie = Technologie::findOrFail($id);
+            showLog(Technologie::class,$id);
+            return view('backEnd.admin.technologie.show', compact('technologie'));
+        }
+
+        session()->flash('error', ' l\'arcticle n\'existe pas !');
+        showFailureLog(Technologie::class,$id);
         return view('backEnd.admin.technologie.show', compact('technologie'));
+
     }
 
     /**
@@ -74,8 +87,14 @@ class TechnologieController extends Controller
      */
     public function edit($id)
     {
-        $technologie = Technologie::findOrFail($id);
 
+        if (Technologie::findOrFail($id))   {
+            $technologie = Technologie::findOrFail($id);
+            editLog(Technologie::class,$id);
+            return view('backEnd.admin.technologie.edit', compact('technologie'));
+        }
+
+        editFailureLog(Technologie::class,$id);
         return view('backEnd.admin.technologie.edit', compact('technologie'));
     }
 
@@ -88,14 +107,23 @@ class TechnologieController extends Controller
      */
     public function update($id, Request $request)
     {
-        
-        $technologie = Technologie::findOrFail($id);
-        $technologie->update($request->all());
 
-        Session::flash('message', 'Technologie updated!');
-        Session::flash('status', 'success');
 
+        if (Technologie::findOrFail($id)){
+            $technologie =  Technologie::findOrFail($id);
+
+            if ($technologie->update($request->all())){
+                session()->flash('success', 'Log mise à jours avec succès!');
+                updateLog(Technologie::class,$id);
+                return redirect('technologie');
+            }
+        }
+
+
+        session()->flash('error', 'Echec mise à jours , l\'arcticle n\'existe pas !');
+        updateFailureLog(Technologie::class,$id);
         return redirect('technologie');
+
     }
 
     /**
@@ -107,14 +135,16 @@ class TechnologieController extends Controller
      */
     public function destroy($id)
     {
-        $technologie = Technologie::findOrFail($id);
+        if (Technologie::findOrFail($id))   {
+            $technologie = Technologie::findOrFail($id);
+            $technologie->delete();
+            session()->flash('success', 'mise à jours avec effectué avec succes!');
+            deleteLog(Technologie::class,$id);
+            return redirect('technologie');
+        }
 
-        $technologie->delete();
-
-        Session::flash('message', 'Technologie deleted!');
-        Session::flash('status', 'success');
-
+        session()->flash('error', 'Echec suppression , l\'arcticle n\'existe pas !');
+        deleteFailureLog(Technologie::class,$id);
         return redirect('technologie');
     }
-
 }

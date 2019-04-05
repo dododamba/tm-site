@@ -1,24 +1,31 @@
 @extends('backLayout.app')
 @section('title')
-Media
+    Gallery -detail image
+@stop
+@section('breadcumb')
+    image détail
+@stop
+@section('css')
+    <style>
+    
+        
+
+    </style>
+
 @stop
 
 @section('content')
 
-    <h1>Media</h1>
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>ID.</th> <th>Nom</th><th>Description</th><th>Alt</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{ $media->id }}</td> <td> {{ $media->nom }} </td><td> {{ $media->description }} </td><td> {{ $media->alt }} </td>
-                </tr>
-            </tbody>    
-        </table>
-    </div>
+
+ 
+<div class="gallery_product filter hdpe">
+    <img src="/{{ $media->nom }}" alt="{{  $media->alt }}" class="img-responsive">
+    <a href="{{ route('media.show',$media->id) }}" class="btn btn-danger mb-1">
+            Supprimer
+    </a>
+</div>
+
+
+
 
 @endsection
