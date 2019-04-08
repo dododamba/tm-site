@@ -7,10 +7,13 @@ Route::get('/test','HomeController@getPicture')->name('media');
 
 Route::get('/apropo','HomeController@apropos')->name('apropo');
 Route::get('/services','HomeController@service')->name('services');
+Route::get('/produits','HomeController@service')->name('produits');
+
 Route::get('/services/{detail}','HomeController@serviceFindDetail')->name('services.detail');
 
-Route::get('/produits','HomeController@produits')->name('produits');
+Route::get('/produits','HomeController@produit')->name('produits');
 Route::get('/contacts','HomeController@contact')->name('contacts');
+Route::post('/contact/create', 'HomeController@messageFromUser')->name('message.contact.create');
 
 
 Route::get('/get-login', function () {
@@ -32,8 +35,8 @@ Route::group(['middleware' => ['senseiAuth', 'roles']], function () {
 
     Route::get('/carousel', 'CarouselController@index')->name('carousel');
     Route::get('carousel/create', 'CarouselController@create')->name('carousel.create');
-
     Route::post('carousel/delete/{id}', 'CarouselController@destroy')->name('carousel.delete');
+    Route::post('slider/store', 'CarouselController@store')->name('slider.store');
 
     Route::get('citation/create', 'CarouselCitationController@create')->name('citation.create');
     Route::get('citation/{id}/show', 'CarouselCitationController@show')->name('citation.show');
@@ -62,7 +65,7 @@ Route::group(['middleware' => ['senseiAuth', 'roles']], function () {
     Route::put('logo/{id}/update', 'LogoController@update')->name('logo.update');
     Route::delete('logo/{id}/delete', 'LogoController@destroy');
     Route::get('logos', 'LogoController@index')->name('logo.index');
-    
+
     Route::get('icon/create', 'IconController@create')->name('icon.create');
     Route::get('icon/{id}/show', 'IconController@show')->name('icon.show');
     Route::get('icon/{id}/edit', 'IconController@edit')->name('icon.edit');
@@ -93,6 +96,11 @@ Route::group(['middleware' => ['senseiAuth', 'roles']], function () {
     Route::resource('logs', 'LogsController');
     Route::get('/logout', 'LoginController@logout')->name('logout');
     Route::get('/my-profile', 'ProfileController@index')->name('myprofile');
+    Route::get('/my-profile-password', 'ProfileController@password')->name('myprofile.password');
+    Route::get('/my-profile-private-data', 'ProfileController@private')->name('myprofile.private');
+    Route::get('/my-profile-picture', 'ProfileController@picture')->name('myprofile.picture');
+
+    Route::post('profile-picture/store', 'MediaController@store')->name('profile.picture.store');
     Route::post('/password-modifiable', 'ProfileController@changeMyPassword');
     Route::post('/personnal-info-modifiable', 'ProfileController@changeMyPersonnalInformation');
 

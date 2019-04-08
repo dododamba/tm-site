@@ -283,7 +283,7 @@ if (!function_exists('updateFailureLog')) {
 if (!function_exists('storeLog')) {
     function storeLog($model)
     {
-        SenseiLogger::store(
+        SenseiLogger::create(
             [
                 'action' => Conf::get('constants.STORE_ACTION').', item id : ',
                 'adresseIp' => getIpAdress(),

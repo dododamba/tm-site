@@ -15,7 +15,17 @@ Icon
 <?php endif; ?>
 
 
-    <h1>Icon <a href="<?php echo e(url('icon/create')); ?>" class="btn btn-primary pull-right btn-sm">Add New Icon</a></h1>
+<?php if(session()->has('success')): ?>
+    <?php echo $__env->make('alert.alert_success', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php endif; ?>
+<?php if(session()->has('error')): ?>
+    <div class="alert alert-danger alert-dismissable">
+        <?php echo $__env->make('alert.alert_error', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    </div>
+<?php endif; ?>
+
+
+<h1>Icon <a href="<?php echo e(url('icon/create')); ?>" class="btn btn-primary pull-right btn-sm">+</a></h1>
     <div class="table table-responsive">
         <table class="table table-bordered table-striped table-hover" id="tblicon">
             <thead>

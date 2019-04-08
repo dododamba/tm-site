@@ -43,8 +43,8 @@ class MediaController extends Controller
     public function show($id)
     {
 
-        if (Media::findOrFail($id))   {
-            $medias = Media::findOrFail($id);
+        if (Media::find($id))   {
+            $medias = Media::find($id);
             showLog(Media::class,$id);
             return view('backEnd.admin.medias.show', compact('medias'));
         }
@@ -65,8 +65,8 @@ class MediaController extends Controller
     public function edit($id)
     {
 
-        if (Media::findOrFail($id))   {
-            $medias = Media::findOrFail($id);
+        if (Media::find($id))   {
+            $medias = Media::find($id);
             editLog(Media::class,$id);
             return view('backEnd.admin.medias.edit', compact('medias'));
         }
@@ -86,8 +86,8 @@ class MediaController extends Controller
     {
 
 
-        if (Media::findOrFail($id)){
-            $medias =  Media::findOrFail($id);
+        if (Media::find($id)){
+            $medias =  Media::find($id);
 
             if ($medias->update($request->all())){
                 session()->flash('success', 'Log mise à jours avec succès!');
@@ -112,8 +112,8 @@ class MediaController extends Controller
      */
     public function destroy($id)
     {
-        if (Media::findOrFail($id))   {
-            $medias = Media::findOrFail($id);
+        if (Media::find($id))   {
+            $medias = Media::find($id);
             $medias->delete();
             session()->flash('success', 'mise à jours avec effectué avec succes!');
             deleteLog(Media::class,$id);
@@ -128,7 +128,7 @@ class MediaController extends Controller
     public function selectImg(Request $request)
     {
         $id = $request->id;
-        $media = \App\Media::findOrFail($id);
+        $media = \App\Media::find($id);
         $nom = $media->nom;
         $medias = \App\Media::orderBy('created_at', 'desc')->paginate(6);
         $request->session()->put('image', $nom);

@@ -2,8 +2,9 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -29,7 +30,7 @@ class User extends Authenticatable
 
     public function roles()
     {
-      return $this->hasOne(Role::class,'id','role');
+        return $this->belongsTo(Role::class, 'role');
     }
 
     private function checkIfUserHasRole($need_role)
@@ -54,4 +55,15 @@ class User extends Authenticatable
        }
        return false;
    }
+
+    public function photos()
+    {
+        $logged_user_id = Auth::user()->id;
+        return Media::all()->where('owner',$logged_user_id);
+    }
+
+    public function current_profile_pict()
+    {
+        return $this->hasMany(Media::class,'owner')->orderBy('created_at','desc');
+    }
 }

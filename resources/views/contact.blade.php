@@ -26,6 +26,14 @@
 @section('content')
 
 
+          						@if(session()->has('success'))
+          							@include('alert.alert_success')
+          						@endif
+          						@if(session()->has('error'))
+          							<div class="alert alert-danger alert-dismissable">
+          								@include('alert.alert_error')
+          							</div>
+          						@endif
 
   <section id="mu-contact">
    <div class="container">
@@ -38,20 +46,20 @@
           </div>
 
 
-        
+
 
 
           <!-- end title -->
           <!-- start messagecontact content -->
 
-          
-          
+
+
 
            <div class="mu-contact-content">
             <div class="row">
               <div class="col-md-6">
                 <div class="mu-contact-left">
-                  <form class="contactform" action="{{route('messagecontact.create')}}" method="POST">
+                  <form class="contactform" action="{{route('message.contact.create')}}" method="POST">
                     {!! csrf_field() !!}
                     <p class="comment-form-author">
                       <label for="author">Nom et Prénom<span class="required">*</span></label>

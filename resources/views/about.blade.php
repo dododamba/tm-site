@@ -33,13 +33,10 @@
                 <div class="mu-course-container mu-course-details">
                   <div class="row">
                     <div class="col-md-12">
-                      <div class="mu-latest-course-single">
-                        <figure class="mu-latest-course-img">
-                          <a href="#"><img src="{{ url('main') }}assets/img/courses/1.jpg" alt="img"></a>
-                        </figure>
+                      <div class="mu-latest-course-single" style="align : center;">
+
                         <div class="mu-latest-course-single-content">
                           <h2><a href="#">A Propos de TECHNO MEGA PARTNERS</a></h2>
-
                           <blockquote>
                             <p>{{ $apropos->texte }}</p>
                           </blockquote>

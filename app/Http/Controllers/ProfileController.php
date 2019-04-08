@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use App\User;
 use Auth;
 use Hash;
-use Session;
-
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use Session;
 
 
 class ProfileController extends Controller
@@ -21,9 +20,49 @@ class ProfileController extends Controller
     public function index()
     {
       $user = User::findOrFail(Auth::user()->id);
-      createLog(User::class);
-      return view('backEnd.admin.user.profile',compact($user));
+      $user_pic = $user->current_profile_pict;
+     createLog(User::class);
+      //return view('backEnd.admin.user.profile',compact($user));
+        dd($user_pic);
     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function password()
+    {
+        $user = User::findOrFail(Auth::user()->id);
+
+        createLog(User::class);
+        return view('backEnd.admin.user.password', compact($user));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function private()
+    {
+        $user = User::findOrFail(Auth::user()->id);
+        createLog(User::class);
+        return view('backEnd.admin.user.private', compact($user));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function picture()
+    {
+        $user = User::findOrFail(Auth::user()->id);
+        createLog(User::class);
+        return view('backEnd.admin.user.profile_pict', compact($user));
+    }
+
 
     /**
      * Display the specified resource.
@@ -66,7 +105,7 @@ class ProfileController extends Controller
 
             updateLog(User::class,$id);
             session()->flash('error','Mise effectué');
-            return view('backEnd.admin.user.index');
+        return view('backEnd.admin.user.profile');
 
     }
 
@@ -82,7 +121,7 @@ class ProfileController extends Controller
        $password_updated_successfuly = "mot de pass mise à jours avec succès";
 
       if (strcmp($new_password,$new_password_confirmation) == 0) {
-         $user = $this->show($loged_user_id);
+          $user = User::findOrFail($loged_user_id);
          $hashedPassword = $user->password;
          if (Hash::check($old_password, $hashedPassword)) {
            $data = [
@@ -97,14 +136,15 @@ class ProfileController extends Controller
            ];
 
             $user->update($data);
-            flashy()->success($password_updated_successfuly, '');
+             session()->flash('success', $password_updated_successfuly);
             return redirect('/my-profile');
 
          }else {
-
+             session()->flash('error', 'L\'ancien mot de pass saisie est incorrect');
+             return redirect('/my-profile');
          }
       }else {
-        flashy()->error($error_password_not_match, '');
+          session()->flash('error', $error_password_not_match);
         return redirect('/my-profile');
       }
     }
@@ -120,7 +160,7 @@ class ProfileController extends Controller
     $email = $request->email;
 
 
-    $user = $this->show($loged_user_id);
+      $user = User::findOrFail($loged_user_id);
     $password = $request->password;
     $hashedPassword = $user->password;
 
@@ -179,5 +219,52 @@ class ProfileController extends Controller
     }
 
   }
+
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $format = file_manager()->extension('media');
+        $extention = [
+            'png', 'PNG', 'JPEG', 'jpeg', 'jpg', 'JPG'
+            //'audio'  => ['mp3','MP3','m4a','3gp','wav','bwf','aac'],
+            //'video' => ['avi','mp4']
+        ];
+
+        if (!in_array($format, $extention)) {
+            $token = name_generator('tmp', 10);
+            $filename = file_manager()->filename('images/images/' . $token, 'media');
+            $data = [
+                'nom' => $filename,
+                'description' => Str::slug($filename, '-'),
+                'alt' => Str::slug($filename, '-'),
+                'type' => $format,
+                'owner' => Auth::user()->id
+            ];
+
+            if (Media::create($data)) {
+                file_manager()->store('images/images/' . $token, 'media');
+                session()->flash('success', 'image ajouté avec succès ');
+                return redirect('myprofile');
+
+            } else {
+                session()->flash('error', 'Echec de téléchargement, recommencez ');
+                return redirect('myprofile');
+            }
+
+        } else {
+            session()->flash('error', 'le fichier choisie n\'est pas une image ');
+            return redirect('myprofile');
+
+
+        }
+
+
+    }
 
 }

@@ -16,6 +16,7 @@ use App\Coordonee;
 use App\ServiceIntro;
 use App\Technologie;
 use App\CarouselCitation;
+use App\MessageContact;
 
 use Illuminate\Http\Request;
 
@@ -63,7 +64,7 @@ class HomeController extends Controller
         $icons = Icon::orderBy('created_at','desc')->get();
         $citation = CarouselCitation::all();
 
-        createLog('Consultation','Ouverture de la page a propos');
+        defaultLog(Front::class);
 
         return view('about',
             compact('apropos', 'technologies',
@@ -84,7 +85,7 @@ class HomeController extends Controller
         $icons = Icon::orderBy('created_at','desc')->get();
         $citation = CarouselCitation::all();
 
-        createLog('Consultation','Ouverture de la page services et produits');
+        defaultLog(Front::class);
 
         return view('service',
             compact('produits', 'services',
@@ -95,6 +96,25 @@ class HomeController extends Controller
     }
 
 
+    public function produit()
+    {
+
+        $produits = Produit::all();
+        $contact = Contact::all()->first();
+        $coordonee = Coordonee::all()->first();
+        $icons = Icon::orderBy('created_at','desc')->get();
+        $citation = CarouselCitation::all();
+
+        defaultLog(Front::class);
+
+        return view('produit',
+            compact('produits',
+            'icons',
+            'contact',
+            'coordonee',
+            'citation'));
+    }
+
 
 
     public function serviceFindDetail(Request $request,$slug)
@@ -104,11 +124,11 @@ class HomeController extends Controller
             ->get();
         if ($request->has('slug'))    {
 
-            createLog('Consultation avec succes','détail produits '.$get_one->nom.' num  : '.$get_one->id );
+            defaultLog(Front::class);
             return  view('detail_service',compact('get_one'));
         }
 
-        createLog('Consultation echec','détail produits '.$get_one->nom.' num  : '.$get_one->id );
+        defaultLog(Front::class);
 
         return view('page_not_found');
     }
@@ -119,7 +139,7 @@ class HomeController extends Controller
         $icons = Icon::orderBy('created_at','desc')->get();
         $citation = CarouselCitation::all();
 
-        createLog('Consultation','Ouverture de la page messagecontact');
+        defaultLog(Front::class);
 
 
         return view('contact',compact(
@@ -129,11 +149,25 @@ class HomeController extends Controller
         'citation'));
     }
 
-    public function getPicture()
+    public function messageFromUser(Request $request)
     {
 
-        $carousel = Carousel::findOrFail(1);
+      $data = [
+        'nom' => $request->nom,
+        'email' => $request->email,
+        'sujet' => $request->sujet,
+        'message' => $request->message
+      ];
 
-        dd($carousel);
+      if (MessageContact::create($data)) {
+        storeLog(MessageContact::class);
+        session()->flash('succes','Votre message a été envoyé avec succès, veuillez consulter votre boite email pour une eventuelle reponse');
+        return redirect('contacts');
+
+      }
+      storeFailureLog(MessageContact::class);
+      session()->flash('error','Erreur, veuillez recommencer svp !');
+      return redirect('contacts');
+
     }
 }

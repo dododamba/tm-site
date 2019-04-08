@@ -13,7 +13,7 @@
                 <h4></h4>
                 <span></span>
                 <p><?php echo e($item->texte); ?></p>
-                <a href="/<?php echo e($item->lien); ?>" target="_blank" class="mu-read-more-btn">Voir</a>
+                <a href="<?php echo e($item->lien); ?>" target="_blank" class="mu-read-more-btn">Voir</a>
             </div>
         </div>
        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -32,7 +32,7 @@
                         </div>
                         <!-- Start single service -->
                         <!-- Start single service -->
-                        <div class="mu-service-single"  style="background-color : black;">
+                        <div class="mu-service-single"  style="background-color : white;border-radius : 2px 2px 2px 2px solid black; color : black;">
                             <span class="fa fa-users"></span>
                             <h3>Responsabilité</h3>
 
@@ -180,7 +180,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            
+
 
 
 

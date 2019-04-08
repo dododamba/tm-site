@@ -3,7 +3,7 @@
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('css'); ?>
     <style>
-    
+
         hr {
             display: block;
             clear: both;
@@ -174,64 +174,41 @@
     <h1>Nouveau Carousel</h1>
 
 
- 
+
     <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
                     <!-- Credit Card -->
                     <div id="pay-invoice">
                         <div class="card-body">
-                    
-                                
 
-                                <?php if(session()->has('image')): ?>
-                                    <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter hdpe">
-                                        <img src="/<?php echo e($media->nom); ?>" alt="" class="img-responsive">
-                                        <a href="<?php echo e(route('media.show',$media->id)); ?>" class="btn btn-secondary mb-1">
-                                                Voir
-                                        </a>
-                                    </div>
-                               <?php else: ?>
-                               
-                               <form action="<?php echo e(route('media.fromcarousel.store')); ?>" method="POST" enctype="multipart/form-data">
-                                <?php echo csrf_field(); ?>
+                            <form action="<?php echo e(route('slider.store')); ?>" method="post" enctype="multipart/form-data">
 
-                                <div class="file-upload">
-                                    <button class="file-upload-btn" type="button"
-                                            onclick="$('.file-upload-input').trigger( 'click' )">Ajouter une image
-                                    </button>
-        
-                                    <div class="image-upload-wrap">
-                                        <input class="file-upload-input" type='file' onchange="readURL(this);"
-                                               accept="image/*" name="media"/>
-                                        <div class="drag-text">
-                                            <h3>Glissez et Deposez ou Cliquez ici pour selection une image</h3>
-                                        </div>
+                              <?php echo e(csrf_field()); ?>
+
+
+                            <div class="file-upload">
+                                <button class="file-upload-btn" type="button"
+                                        onclick="$('.file-upload-input').trigger( 'click' )">Ajouter une image
+                                </button>
+                                <div class="image-upload-wrap">
+                                    <input class="file-upload-input" type='file' onchange="readURL(this);"
+                                           accept="image/*" name="media"/>
+                                    <div class="drag-text">
+                                        <h3>Glissez et Deposez ou Cliquez ici pour selection une image</h3>
                                     </div>
-                                    <div class="file-upload-content">
-                                        <img class="file-upload-image" src="#" alt="your image"/>
-                                        <div class="image-title-wrap">
-                                            <div class="row">
-                                                <button type="button" onclick="removeUpload()" class="remove-image">Changer
-                                                    <span
-                                                            class="image-title">Image chargée</span></button>
-        
-                                                <button type="submit" class="store-image">Enregistrer</button>
-                                            </div>
+                                </div>
+                                <div class="file-upload-content">
+                                    <img class="file-upload-image" src="#" alt="your image"/>
+                                    <div class="image-title-wrap">
+                                        <div class="row">
+                                            <button type="button" onclick="removeUpload()" class="remove-image">Changer
+                                                <span
+                                                        class="image-title">Image chargée</span></button>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
-                            
-                            <?php endif; ?>
-
-
-
-
-
-                            <?php echo Form::open(['url' => 'carousel', 'class' => 'form-horizontal']); ?>
-
-
+                            </div>
                                 <div class="form-group">
                                     <label for="cc-payment" class="control-label mb-1">Lien</label>
                                     <input id="cc-pament" name="lien" type="text" class="form-control" aria-required="true">
@@ -249,14 +226,9 @@
                                                 <option value="0"  style="color: red">Inactive</option>
                                                 <option value="1" style="color: green">Active</option>
                                             </select>
-                                
+
                                         </div>
 
-                                        <?php if(session()->has('image_key')): ?>
-                                        <input type="hidden" value="<?php echo e(session()->get('image_key')); ?>" name="image">
-                                       <?php endif; ?>
-                                   
-                                   
 
                                     <div>
                                         <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">
@@ -276,7 +248,7 @@
 
 
         </div>
- 
+
 
 
 
@@ -321,7 +293,6 @@
     <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 
 <?php $__env->stopSection(); ?>
-
 
 <?php echo $__env->make('backLayout.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php /* /home/devtools/PHP/projects/tm-site/resources/views/backEnd/admin/carousel/create.blade.php */ ?>

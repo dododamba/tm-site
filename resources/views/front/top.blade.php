@@ -54,7 +54,9 @@
           <ul id="top-menu" class="nav navbar-nav navbar-right main-nav">
             <li><a href="{{ route('main') }}">Accueil</a></li>
             <li><a href="{{ route('apropo') }}">A Propos</a></li>
-            <li><a href="{{ route('services') }}">Services & Produits</a></li>
+            <li><a href="{{ route('services') }}">Services</a></li>
+            <li><a href="{{ route('produits') }}">Produits</a></li>
+            <li><a href="{{ route('apropo') }}">Blog</a></li>
             <li><a href="{{ route('contacts') }}">Contact</a></li>
           </ul>
         </div><!--/.nav-collapse -->

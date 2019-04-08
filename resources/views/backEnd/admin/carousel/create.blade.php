@@ -4,7 +4,7 @@
 @stop
 @section('css')
     <style>
-    
+
         hr {
             display: block;
             clear: both;
@@ -175,62 +175,40 @@
     <h1>Nouveau Carousel</h1>
 
 
- 
+
     <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
                     <!-- Credit Card -->
                     <div id="pay-invoice">
                         <div class="card-body">
-                    
-                                
 
-                                @if(session()->has('image'))
-                                    <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter hdpe">
-                                        <img src="/{{ $media->nom }}" alt="" class="img-responsive">
-                                        <a href="{{ route('media.show',$media->id) }}" class="btn btn-secondary mb-1">
-                                                Voir
-                                        </a>
+                            <form action="{{route('slider.store')}}" method="post" enctype="multipart/form-data">
+
+                              {{ csrf_field() }}
+
+                            <div class="file-upload">
+                                <button class="file-upload-btn" type="button"
+                                        onclick="$('.file-upload-input').trigger( 'click' )">Ajouter une image
+                                </button>
+                                <div class="image-upload-wrap">
+                                    <input class="file-upload-input" type='file' onchange="readURL(this);"
+                                           accept="image/*" name="media"/>
+                                    <div class="drag-text">
+                                        <h3>Glissez et Deposez ou Cliquez ici pour selection une image</h3>
                                     </div>
-                               @else
-                               
-                               <form action="{{route('media.fromcarousel.store')}}" method="POST" enctype="multipart/form-data">
-                                {!! csrf_field() !!}
-                                <div class="file-upload">
-                                    <button class="file-upload-btn" type="button"
-                                            onclick="$('.file-upload-input').trigger( 'click' )">Ajouter une image
-                                    </button>
-        
-                                    <div class="image-upload-wrap">
-                                        <input class="file-upload-input" type='file' onchange="readURL(this);"
-                                               accept="image/*" name="media"/>
-                                        <div class="drag-text">
-                                            <h3>Glissez et Deposez ou Cliquez ici pour selection une image</h3>
-                                        </div>
-                                    </div>
-                                    <div class="file-upload-content">
-                                        <img class="file-upload-image" src="#" alt="your image"/>
-                                        <div class="image-title-wrap">
-                                            <div class="row">
-                                                <button type="button" onclick="removeUpload()" class="remove-image">Changer
-                                                    <span
-                                                            class="image-title">Image chargée</span></button>
-        
-                                                <button type="submit" class="store-image">Enregistrer</button>
-                                            </div>
+                                </div>
+                                <div class="file-upload-content">
+                                    <img class="file-upload-image" src="#" alt="your image"/>
+                                    <div class="image-title-wrap">
+                                        <div class="row">
+                                            <button type="button" onclick="removeUpload()" class="remove-image">Changer
+                                                <span
+                                                        class="image-title">Image chargée</span></button>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
-                            
-                            @endif
-
-
-
-
-
-                            {!! Form::open(['url' => 'carousel', 'class' => 'form-horizontal']) !!}
-
+                            </div>
                                 <div class="form-group">
                                     <label for="cc-payment" class="control-label mb-1">Lien</label>
                                     <input id="cc-pament" name="lien" type="text" class="form-control" aria-required="true">
@@ -248,14 +226,9 @@
                                                 <option value="0"  style="color: red">Inactive</option>
                                                 <option value="1" style="color: green">Active</option>
                                             </select>
-                                
+
                                         </div>
 
-                                        @if(session()->has('image_key'))
-                                        <input type="hidden" value="{{session()->get('image_key')}}" name="image">
-                                       @endif
-                                   
-                                   
 
                                     <div>
                                         <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">
@@ -275,7 +248,7 @@
 
 
         </div>
- 
+
 
 
 
@@ -320,4 +293,3 @@
     <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 
 @endsection
-

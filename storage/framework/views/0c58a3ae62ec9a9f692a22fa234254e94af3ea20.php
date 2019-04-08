@@ -1,197 +1,74 @@
 <?php $__env->startSection('title'); ?>
 Mon profile
 <?php $__env->stopSection(); ?>
+<?php $__env->startSection('breadcumb'); ?>
+ Profile
+<?php $__env->stopSection(); ?>
 <?php $__env->startSection('css'); ?>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
-<?php echo $__env->make('flashy::message', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-<div class="emp-profile">
-            <form method="post">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="profile-img">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog" alt=""/>
-                            <div class="file btn btn-lg btn-primary">
-                                Changer Photo
-                                <input type="file" name="file"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="profile-head">
-                                    <h3>
-                                      <p><?php echo e(Auth::user()->first_name); ?> <?php echo e(Auth::user()->last_name); ?></p>
-                                    </h3>
-                                    <h6>
-                                        <?php echo e(Auth::user()->roles->name); ?>
 
-                                    </h6>
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                    </div
-                </div>
-                <div class="row">
-                    <div class="col-md-8">
-                        <div id="myTabContent">
-                            <div id="profile" role="tabpanel">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Nom et Prénom : </label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?php echo e(Auth::user()->first_name); ?> <?php echo e(Auth::user()->last_name); ?></p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Pseudo : </label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?php echo e(Auth::user()->username); ?></p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Date d'inscription : </label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?php echo e(Auth::user()->created_at); ?></p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Email : </label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p><?php echo e(Auth::user()->email); ?></p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Téléphone : </label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p>+24106063900</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                          <input data-toggle="modal" data-target="#squarespaceModal" class="btn btn-warning" value="Editer le profile"/>
-                                          <input data-toggle="modal" data-target="#changepassword" class="btn btn-danger" value="Changer mot de pass"/>
-                                        </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
+    <?php if(session()->has('success')): ?>
+        <?php echo $__env->make('alert.alert_success', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php endif; ?>
+    <?php if(session()->has('error')): ?>
+        <div class="alert alert-danger alert-dismissable">
+            <?php echo $__env->make('alert.alert_error', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         </div>
+    <?php endif; ?>
+
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
 
 
+                <div class="col-md-12">
+                            <div class="mx-auto d-block">
+                                <img class="rounded-circle mx-auto d-block" src="<?php echo e(Auth::user()->current_profile_pict->nom); ?>" alt="Card image cap" style="width: 167px;height: 158px;">
+                                <h5 class="text-sm-center mt-2 mb-1"><?php echo e(Auth::user()->first_name); ?> <?php echo e(Auth::user()->last_name); ?></h5>
+                                <div class="location text-sm-center"><?php echo e(Auth::user()->username); ?> (<?php echo e(Auth::user()->roles->name); ?>)  </div>
+                                <div class="col-md-1"></div>
+                               <div class="col-md-10">
+                                   <ul class="list-group list-group-flush">
+                                       <li class="list-group-item">
+                                           <a href="#">Nom et Prénom :  <span class="pull-right"><?php echo e(Auth::user()->first_name); ?> <?php echo e(Auth::user()->last_name); ?></span></a>
+                                       </li>
+                                       <li class="list-group-item">
+                                           <a href="#"> Pseudo :  <span class="pull-right"><?php echo e(Auth::user()->username); ?></span></a>
+                                       </li>
+                                       <li class="list-group-item">
+                                           <a href="#"> Email  : <span class="pull-right r-activity"><?php echo e(Auth::user()->email); ?></span></a>
+                                       </li>
+                                       <li class="list-group-item">
+                                           <a href="#"> Profile :  <span class="pull-right r-activity"><?php echo e(Auth::user()->roles->name); ?></span></a>
+                                       </li>
 
-        <div class="modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-        	<div class="modal-content">
-        		<div class="modal-header">
-        			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">X</span></button>
-        			<h3 class="modal-title" id="lineModalLabel">Modification profile</h3>
-        		</div>
-        		<div class="modal-body">
-
-                    <!-- content goes here -->
-                    <?php echo Form::open(['url' => 'personnal-info-modifiable']); ?>
-
-                  <div class="form-group">
-                  <label for="exampleInputEmail1">Nom</label>
-                  <input type="text" class="form-control" name="first_name" value="<?php echo e(Auth::user()->first_name); ?>">
-                </div>
-
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Prenom</label>
-                  <input type="text" class="form-control" name="last_name" value="<?php echo e(Auth::user()->last_name); ?>">
-                </div>
-
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Nom d'Utilisateur</label>
-                  <input type="text" class="form-control" name="username" value="<?php echo e(Auth::user()->username); ?>">
-                </div>
+                                       <li class="list-group-item">
+                                           <a href="#"> Date de création : <span class="pull-right"><?php echo e(Auth::user()->created_at); ?></span></a>
+                                       </li>
 
 
-                      <div class="form-group">
-                        <label for="exampleInputEmail1">Email</label>
-                        <input type="email" class="form-control" name="email" value="<?php echo e(Auth::user()->email); ?>">
-                      </div>
+                                   </ul>
+                                   <hr>
+                                   <div class="clearfix"></div>
+                                   <div class="card-text text-sm-center">
+                                       <a  href="<?php echo e(route('myprofile.picture')); ?>" class="btn btn-primary"><i class="fa fa-edit"></i>Photo de profile</a>
+                                       <a  href="<?php echo e(route('myprofile.private')); ?>" class="btn btn-default"><i class="fa fa-edit"></i>Informations Personnelles</a>
+                                       <a  href="<?php echo e(route('myprofile.password')); ?>" class="btn btn-danger"><i class="fa fa-edit"></i>Mot de Pass</a>
+                                   </div>
+                               </div>
 
-
-                      <div class="form-group">
-                        <label for="exampleInputEmail1">Entrez votre mot de pass pour confirmer la modification</label>
-                        <input type="password" class="form-control" name="password" >
-                      </div>
-
-                      <button type="submit" class="btn btn-default">Enregistrer</button>
-                      <button type="button" class="btn btn-default" data-dismiss="modal"  role="button">Annuler</button>
-
-                    </form>
-
-        		</div>
-
-        	</div>
-          </div>
-        </div>
-
-
-
-        <div class="modal fade" id="changepassword" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-	<div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-			<h3 class="modal-title" id="lineModalLabel">Modification mot de pass</h3>
-		</div>
-		<div class="modal-body">
-
-            <!-- content goes here -->
-
-
-
-
-
-            <?php echo Form::open(['url' => 'password-modifiable']); ?>
-
-
-
-
-              <div class="form-group">
-                <label for="exampleInputPassword1">Nouveau mot de pass</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Entrez un nouveau mot de pass" name="password">
-              </div>
-
-                  <div class="form-group">
-                              <label for="exampleInputPassword1">Confirmation nouveau mot de pass</label>
-                              <input class="password" name="passwordconfirmation" type="password" placeholder="Entrez le meme mot de pass que vous veniez de saisir"/>
-
-                            <div class="form-group">
-                              <label for="exampleInputPassword1">Entrez l'ancien mot de pass pour confirmer</label>
-                              <input type="password" class="form-control" placeholder="Entrez votre ancien mot pass pour valider la modification" name="oldpassword" >
+                                <div class="col-md-1"></div>
                             </div>
 
-                            <button type="submit" class="btn btn-default">Enregistrer</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal"  role="button">Annuler</button>
+                </div>
 
-          </form>
 
-		</div>
+            </div><!-- .row -->
+        </div><!-- .animated -->
+    </div>
 
-	</div>
-  </div>
-</div>
-
-</script>
-        <?php $__env->stopSection(); ?>
+<?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('backLayout.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php /* /home/devtools/PHP/projects/tm-site/resources/views/backEnd/admin/user/profile.blade.php */ ?>

@@ -44,14 +44,58 @@ class CarouselController extends Controller
     public function store(Request $request)
     {
 
+      if ($request->hasFile('media')) {
+        $media = $request->file('media');
 
-        if ( Carousel::create($request->all())) {
-            session()->flash('message', tableName(Carousel::class).' ajouté avec succès, id = '.lastChild(Carousel::class));
-            storeLog(Carousel::class);
-            return redirect('carousel');
+          $extention = [
+              'image/png', 'image/PNG', 'image/JPEG', 'image/jpeg', 'image/jpg', 'image/JPG'
+          ];
 
-        }
+          $token = name_generator('tmp', 10);
+          $filename = file_manager()->filename('images/images/' . $token, 'media');
+
+          if (in_array($media->getMimeType(),$extention)) {
+            $data = [
+               'lien' => $request->lien,
+               'texte' => $request->texte,
+               'statut' => (integer)$request->statut,
+               'media' => 0
+            ];
+
+            if ( Carousel::create($data)) {
+              $owner = Carousel::orderBy('created_at','desc')->first();
+              $data_media = [
+                  'nom' => $filename,
+                  'description' => \Illuminate\Support\Str::slug($filename, '-'),
+                  'alt' => $filename,
+                  'type' => $media->getMimeType(),
+                  'owner' => $owner->id
+              ];
+              if (\App\Media::create($data_media)) {
+                file_manager()->store('images/images/' . $token, 'media');
+                self::setMedia($filename);
+                session()->flash('success','Carousel ajouté avec succès ');
+                storeLog(Carousel::class);
+                return redirect('carousel');
+              }
+              storeFailureLog(Carousel::class);
+              session()->flash('error','Erreur fichier image,réessayz !');
+              return redirect('carousel');
+
+
+              }
+              storeFailureLog(Carousel::class);
+              session()->flash('error','Erreur d\'enregistrement du carousel,réessayz !');
+              return redirect('carousel');
+          }
+          storeFailureLog(Carousel::class);
+          session()->flash('error','Vueillez choisir un fichier de type image !');
+          return redirect('carousel');
+
+      }
+
         createFailureLog(Carousel::class);
+        session()->flash('error','Vueillez choisir un fichier de type image !');
         return redirect('carousel');
     }
 
@@ -145,5 +189,22 @@ class CarouselController extends Controller
         session()->flash('error', 'Echec suppression , l\'arcticle n\'existe pas !');
         deleteFailureLog(Carousel::class,$id);
         return redirect('carousel');
+    }
+
+
+    public static function setMedia($name)
+    {
+      $media = \App\Media::where('nom','=',$name)->first();
+
+      $carousel = Carousel::where('id','=',$media->id)->first();
+      $data = [
+        'lien' => $carousel->lien,
+        'texte' => $carousel->texte,
+        'statut' => $carousel->statut,
+        'media' => $media->id
+      ];
+
+      $carousel->update($data);
+
     }
 }

@@ -37,9 +37,9 @@ class LoginController extends Controller {
 
             return redirect()->route('dashboard');
         }
-        session()->flashy('error','Indentifiant incorrect, veuillez réesayer ou contactez les administrateurs');
+        session()->flash('error','Indentifiant incorrect, veuillez réesayer ou contactez les administrateurs');
 
-        return redirect()->route('main');
+        return redirect()->route('getlogin');
     }
 
     public function logout() {

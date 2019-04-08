@@ -24,14 +24,27 @@
 
 
 
+
+
 		<div class="sufee-login d-flex align-content-center flex-wrap">
 				<div class="container">
 					<div class="login-content">
 						<div class="login-logo">
 							<a href="index.html">
-								<img class="align-content" src="images/logo.png" alt="">
+								<img src="<?php echo e(asset('front')); ?>/assets/img/logo.png" alt="TMP" style="width: 100px;height: 100px;">
 							</a>
 						</div>
+
+						<?php if(session()->has('success')): ?>
+							<?php echo $__env->make('alert.alert_success', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+						<?php endif; ?>
+						<?php if(session()->has('error')): ?>
+							<div class="alert alert-danger alert-dismissable">
+								<?php echo $__env->make('alert.alert_error', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+							</div>
+						<?php endif; ?>
+
+
 						<div class="login-form">
 
 								<form class="login100-form validate-form" action="<?php echo e(route('login')); ?>" method="POST">
@@ -47,7 +60,7 @@
 													<input type="password" class="form-control" placeholder="Mot de pass" name="password">
 											</div>
 												
-													<button type="submit" class="btn btn-success btn-flat m-b-30 m-t-30">Sign in</button>
+													<button type="submit" class="btn btn-success btn-flat m-b-30 m-t-30">Se Connecter</button>
 													
 												
 					

@@ -13,7 +13,7 @@ class UserDataSeeder extends Seeder
     {
 
 
-        App\Role::create(
+      App\Role::create(
               [
                   'name' => "admin",
                   'description' => "the awesome admin dashboard wich provide you all access",
@@ -24,32 +24,32 @@ class UserDataSeeder extends Seeder
 
       App\Icon::create(
         [
-            'nom' => 'Ion Facebook', 
-            'lien' =>'https://web.facebook.com/tmpgabon/', 
+            'nom' => 'Ion Facebook',
+            'lien' =>'https://web.facebook.com/tmpgabon/',
             'faicon' =>'fa-facebook'
        ]);
 
 
        App\Icon::create(
         [
-            'nom' => 'Ion LinkedIn', 
-            'lien' =>'https://www.linkedin.com/company/14031015', 
+            'nom' => 'Ion LinkedIn',
+            'lien' =>'https://www.linkedin.com/company/14031015',
             'faicon' =>'fa-linkedin'
        ]);
 
       App\APropo::create(
         [
-             'titre' => 'TECHNO MEGA PARTNERS', 
+             'titre' => 'TECHNO MEGA PARTNERS',
              'text' => 'TECHNO MEGA PARTNERS',
-             'image' => 'TECHNO MEGA PARTNERS', 
+             'image' => 'TECHNO MEGA PARTNERS',
              'texte' => 'Créé en 2019, TMP "Techno Méga Partners " est un cabinet d’innovation multi technologique, qui alliant créativité et savoir faire, accompagne les entreprises dans leur transformation numérique. Nous avons une forte capacité d’adaptation de part la pluralité de notre équipe. Nous nous positionnons sur de nouveaux créneaux technologiques et relevons les challenges. L’amélioration de votre quotidien grâce à des solutions adaptées et innovantes est notre priorité. Nous regroupons des profils variés sur les domaines d’expertise suivants : Java, BigData, Web, Web Mobile, Intelligence Artificielle,'
      ]);
 
       App\User::create(
               [
-                  'first_name' => 'Dominique',
-                  'middle_name' => 'Maoundongone',
-                  'last_name' => 'DAMBA',
+                  'first_name' => 'John',
+                  'middle_name' => 'Michael',
+                  'last_name' => 'Doe',
                   'email' => 'darth@fake.io',
                   'password' => bcrypt('password'),
                   'username' => 'admin',
@@ -79,6 +79,16 @@ class UserDataSeeder extends Seeder
                        'nom' =>'Current Position', 'altitude' => '0.401408', 'longitude'=>'9.46176'
                    ]
                );
+
+                App\CarouselCitation(
+                  ['texte'=>"Encouragez l’innovation. Le changement est notre force vitale, la stagnation notre
+glas", 'auteur' => 'David Ogilvy']
+                );
+
+                App\CarouselCitation(
+                  ['texte'=>"L'innovation, c'est une situation qu'on choisit parce qu'on a une passion brûlante pour
+quelque chose.", 'auteur' => 'Steve Jobs']
+                );
 
     }
 }

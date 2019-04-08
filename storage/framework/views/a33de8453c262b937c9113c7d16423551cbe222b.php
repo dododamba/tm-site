@@ -8,6 +8,17 @@ Apropo
 
 <?php $__env->startSection('content'); ?>
 
+
+    <?php if(session()->has('success')): ?>
+        <?php echo $__env->make('alert.alert_success', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php endif; ?>
+    <?php if(session()->has('error')): ?>
+        <div class="alert alert-danger alert-dismissable">
+            <?php echo $__env->make('alert.alert_error', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        </div>
+    <?php endif; ?>
+
+
     <h1>Apropos <a href="<?php echo e(url('apropos/create')); ?>" class="btn btn-primary pull-right btn-sm">Créer un autre texte Apropo</a></h1>
     <div class="table table-responsive">
         <table class="table table-bordered table-striped table-hover" id="tblapropos">

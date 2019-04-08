@@ -9,6 +9,7 @@ Carousel
     @if(session()->has('success'))
         @include('alert.alert_success')
     @endif
+
     @if(session()->has('error'))
         <div class="alert alert-danger alert-dismissable">
             @include('alert.alert_error')
@@ -18,67 +19,14 @@ Carousel
 
     <h1>Carousel <a href=" {{ route('carousel.create') }}"  class="btn btn-primary pull-right btn-sm"  >+</a></h1>
 
-   
 
 
 
-    <div id="DemoModal9" class="modal fade "> <!-- class modal and fade -->
-
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
-                <div class="modal-header"> <!-- modal header -->
-                    <h1>Nouveau Carousel</h1>
-                </div>
-
-                <div class="modal-body"> <!-- modal body -->
-
-                    {!! Form::open(['url' => 'carousel', 'class' => 'form-horizontal']) !!}
-
-                    <div class="form-group {{ $errors->has('texte') ? 'has-error' : ''}}">
-                        {!! Form::label('texte', 'Texte: ', ['class' => 'col-sm-3 control-label']) !!}
-                        <div class="col-sm-6">
-                            {!! Form::text('texte', null, ['class' => 'form-control']) !!}
-                            {!! $errors->first('texte', '<p class="help-block">:message</p>') !!}
-                        </div>
-                    </div>
-                    <div class="form-group {{ $errors->has('lien') ? 'has-error' : ''}}">
-                        {!! Form::label('lien', 'Lien: ', ['class' => 'col-sm-3 control-label']) !!}
-                        <div class="col-sm-6">
-                            {!! Form::text('lien', null, ['class' => 'form-control']) !!}
-                            {!! $errors->first('lien', '<p class="help-block">:message</p>') !!}
-                        </div>
-                    </div>
-
-                    <label for="select" class="col-sm-3 control-label">Selection une image</label>
-                    <select name="image" id="" class="form-control">
-
-                    </select>
-
-                    <div class="form-group">
-                        <div class="col-sm-offset-3 col-sm-3">
-                            {!! Form::submit('Créer', ['class' => 'btn btn-primary form-control']) !!}
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                </div>
-
-
-
-            </div> <!-- / .modal-content -->
-
-        </div> <!-- / .modal-dialog -->
-
-    </div>
-    <div class="table table-responsive">
+     <div class="table table-responsive">
         <table class="table table-bordered table-striped table-hover" id="tblcarousel">
             <thead>
                 <tr>
-                    <th>ID</th><th>Texte</th><th>Lien</th><th>Actions</th>
+                    <th>ID</th><th>Texte</th><th>Lien</th><th>Statut</th> <th>Image</th> <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -87,7 +35,14 @@ Carousel
                     <td>{{ $item->id }}</td>
                     <td><a href="{{ url('carousel', $item->id) }}">{{ $item->texte }}</a></td><td>{{ $item->lien }}</td>
                     <td>
-                        <a href="{{ url('carousel' . $item->id . '/edit') }}" class="btn btn-primary btn-xs" >Mise à jours</a>
+                      @if($item->statut == 0)
+                        <a href="#" class="btn btn-danger">Inactive</a>
+                      @else
+                         <a href="#" class="btn btn-success">Active</a>
+                      @endif
+                    </td> <td><img src="/{{ $item->image->nom }}" alt="{{ $item->image }}" style="height: 50px;width: 50px;"></td>
+                    <td>
+                        <a href="{{ url('carousel/' . $item->id . '/edit') }}" class="btn btn-primary btn-xs" >Mise à jours</a>
 
                         <a data-toggle="modal" data-target="#exampleModal" class=" btn btn-danger btn-xs" data-id="{{ $item->id }}">Suppr.</a>
                         @include('backEnd.admin.carousel._delete')

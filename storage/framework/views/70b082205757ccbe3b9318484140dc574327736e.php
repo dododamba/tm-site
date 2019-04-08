@@ -54,7 +54,9 @@
           <ul id="top-menu" class="nav navbar-nav navbar-right main-nav">
             <li><a href="<?php echo e(route('main')); ?>">Accueil</a></li>
             <li><a href="<?php echo e(route('apropo')); ?>">A Propos</a></li>
-            <li><a href="<?php echo e(route('services')); ?>">Services & Produits</a></li>
+            <li><a href="<?php echo e(route('services')); ?>">Services</a></li>
+            <li><a href="<?php echo e(route('produits')); ?>">Produits</a></li>
+            <li><a href="<?php echo e(route('apropo')); ?>">Blog</a></li>
             <li><a href="<?php echo e(route('contacts')); ?>">Contact</a></li>
           </ul>
         </div><!--/.nav-collapse -->
@@ -63,4 +65,5 @@
   </section>
   <!-- End menu -->
   <!-- Start search box -->
+
 <?php /* /home/devtools/PHP/projects/tm-site/resources/views/front/top.blade.php */ ?>
